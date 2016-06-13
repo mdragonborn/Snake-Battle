@@ -236,8 +236,8 @@ int play_game(int player_count, int bot_count, int bot_level[2], int col1, int c
         blank1 = blank2 = blank3 = blank4 = 0;
         brojac = 0;
         map = reset_board(map);
-        map.moves = 0;
         current = initialise(map, bot_count, player_count, map.moves, lives);
+        map.heads = current;
         init_map();
         previous=(coord*)calloc(sizeof(coord),4);
         display_map(current,previous,col1, col2);
@@ -271,6 +271,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int col1, int c
             if (game_over(lives)) break;
             copy_coord(current,previous);
             copy_coord(next.next,current);
+            map.heads = next.next;
             display_map(current,previous,col1, col2);
             update_map(map,next.next);
             //print_board(map);

@@ -121,13 +121,14 @@ int *check_death(board map, coord current[4], int* lives) {
                 lives[i] = 0;
                 continue;
             }
-            if (map.brd[current[i].x][current[i].y] == -1 || map.brd[current[i].x][current[i].y] != 0)
+            if (map.brd[current[i].x][current[i].y] == -1 || map.brd[current[i].x][current[i].y] != 0) {
                 lives[i] = 0;
+            }
         }
         else lives[i] = 0;
     }
 
-    /*for (i = 1; i < 4; i++) {
+    for (i = 1; i < 4; i++) {
         if (current[0].x == current[i].x && current[0].y == current[i].y) {
             lives[i] = lives[0] = 0;
         }
@@ -139,7 +140,7 @@ int *check_death(board map, coord current[4], int* lives) {
     }
     if (current[2].x == current[3].x && current[2].y == current[3].y) {
         lives[2] = lives[3] = 0;
-    }*/
+    }
 
     return lives;
 }
@@ -148,6 +149,8 @@ board make_map(int n) {
     board map;
     int i;
     map.n = n;
+    map.moves = 0;
+    map.heads = calloc(sizeof(coord), 4);
     map.brd = malloc(sizeof(int *) * (n + 2));
     if (map.brd == NULL) error();
     for (i = 0; i < n + 2; i++) {
