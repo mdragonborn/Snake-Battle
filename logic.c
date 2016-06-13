@@ -33,10 +33,10 @@ coord mediumbot(int x, int y, int dir, int **brd){       //pozivam za oba bota p
     if(i>=0)rez=i;
     else {
         i = -1;
-        if (brd[x - 1][y] == 0)skup[++i] = 0;
-        if (brd[x][y + 1] == 0)skup[++i] = 1;
-        if (brd[x + 1][y] == 0)skup[++i] = 2;
-        if (brd[x][y - 1] == 0)skup[++i] = 3;
+        if (brd[x - 1][y] == 0 && dir != 2)skup[++i] = 0;
+        if (brd[x][y + 1] == 0 && dir != 3)skup[++i] = 1;
+        if (brd[x + 1][y] == 0 && dir != 0)skup[++i] = 2;
+        if (brd[x][y - 1] == 0 && dir != 1)skup[++i] = 3;
 
         j=rand()/(double)(RAND_MAX+1)*(i+1);
         rez=skup[j];
