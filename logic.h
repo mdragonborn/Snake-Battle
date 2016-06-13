@@ -12,7 +12,7 @@
 #define RIGHT 77
 #define UP 72
 #define DOWN 80
-#define TIMEOUT (0.04 * CLOCKS_PER_SEC)
+
 
 
 typedef struct coordinates {
@@ -49,6 +49,6 @@ void update_map(board map, coord* current);
 int skreci(int **brd,int x,int y,int dir);
 coord mediumbotint (int x, int y, int dir, int **brd);
 int keepgoing(const int**brd,int x, int y,int dir);
-
+int players_dead(int* lives);
 
 #endif //PROJEKAT_LOGIC_H

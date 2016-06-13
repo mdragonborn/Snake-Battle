@@ -89,11 +89,13 @@ void error() {
 next_m next_move(board map, coord *current, int moves, int* lives) {
     next_m vrati;
     int input, hor1, hor2;
+    double TIMEOUT;
     clock_t target, start, end;
     vrati.next = calloc(sizeof(coord), 4);
 
     input = 0;
-
+    if (players_dead(lives))TIMEOUT = (0.01 * CLOCKS_PER_SEC);
+    else TIMEOUT = (0.04 * CLOCKS_PER_SEC);
     target = clock() + (clock_t) TIMEOUT;
 
     while ((end = clock()) < target) {
@@ -207,6 +209,7 @@ coord zero_case(coord current) {
 }
 
 coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, board map, int* lives) {
+
     coord *new_coord;
     coord *backup;
     int i;
@@ -426,3 +429,11 @@ coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives
     return new;
 }
 
+int players_dead(int* lives){
+    int i;
+
+    for (i = 0; i < 2; i++){
+        if (lives[i] == 1) return 0;
+    }
+    return 1;
+}
