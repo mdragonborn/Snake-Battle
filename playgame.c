@@ -6,7 +6,7 @@
 #include <windows.h>
 #include <math.h>
 
-int play_game(int player_count, int bot_count, int bot_level[2], int col1, int col2){
+int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     int hor1, hor2, death, brojac, blank1, blank2, blank3, blank4;
     int *lives;
     int i;
@@ -28,7 +28,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int col1, int c
         map.heads = current;
         init_map();
         previous=(coord*)calloc(sizeof(coord),4);
-        display_map(current,previous,col1, col2);
+        display_map(current,previous,colors);
         Sleep(1000);
 
         while(1){
@@ -60,11 +60,11 @@ int play_game(int player_count, int bot_count, int bot_level[2], int col1, int c
             copy_coord(current,previous);
             copy_coord(next.next,current);
             map.heads = next.next;
-            display_map(current,previous,col1, col2);
+            display_map(current,previous,colors);
             update_map(map,next.next);
             //print_board(map);
         }
-        display_map(current,previous,col1,col2);
+        display_map(current,previous,colors);
         free(previous); free(current);
         Sleep(1000);
     }

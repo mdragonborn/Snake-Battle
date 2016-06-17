@@ -33,7 +33,7 @@ void set_bckgd(int bckgd);
 void add_logo(int top, int left, char logo[23][35]);
 void display_main_menu(int old_option, int new_option, option * commands, char logo[23][35], int n_commands);
 void init_map();
-void display_map(coord * current, coord * prev, int col1, int col2);
+void display_map(coord * current, coord * prev, int colors[4]);
 void newgame_menu(char logo[23][35]);
 void high_scores();
 void demo_game();
