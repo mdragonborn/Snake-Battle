@@ -41,6 +41,50 @@ void add_chstring(int top, int left, chtype * string, int color_pair, int bold){
             mvaddch(top, left+i,string[i]|COLOR_PAIR(color_pair));
 }
 
+void addsqr(int top, int left, int size, int color_pair, int bold){
+    int i, j;
+    if (bold)
+    for (i=0;i<size;i++)
+        for(j=0;j<size;j++)
+            mvaddch(top+i,left+i,fill|COLOR_PAIR(color_pair)|A_BOLD);
+    else
+        for (i=0;i<size;i++)
+            for(j=0;j<size;j++)
+                mvaddch(top+i,left+i,fill|COLOR_PAIR(color_pair));
+    return;
+}
+
+void updatesqr(int top_old, int left_old, int top_new, int left_new){
+    int i,j; chtype edge;
+    for(i=0;i<5;i++){
+        if (i==0 || i==4){
+            for (j=0;j<5;j++)
+            mvaddch(top_old+i,left_old+j,' '|COLOR_PAIR(BGD));
+        }
+        else{
+            mvaddch(top_old+i,left_old,' '|COLOR_PAIR(BGD));
+            mvaddch(top_old+i,left_old+4,' '|COLOR_PAIR(BGD));
+        }
+    }
+    for(i=0;i<5;i++){
+        if (i==0 || i==4){
+            for (j=0;j<5;j++){
+                if (i==0 && j==0) edge=ACS_ULCORNER;
+                else if(i==0 && j==4) edge=ACS_URCORNER;
+                else if(i==4 && j==0) edge=ACS_LLCORNER;
+                else if (i==4&& j==4) edge=ACS_LRCORNER;
+                else edge=ACS_HLINE;
+                mvaddch(top_new+i,left_new+j,edge|COLOR_PAIR(BGD));
+            }
+        }
+        else{
+            mvaddch(top_new+i,left_new,ACS_VLINE|COLOR_PAIR(BGD));
+            mvaddch(top_new+i,left_new+4,ACS_VLINE|COLOR_PAIR(BGD));
+        }
+    }
+    return;
+}
+
 void screen(int h, int w){
     initscr();
     if (has_colors()) {
@@ -114,17 +158,17 @@ void display_main_menu(int old_option, int new_option, option * commands, char l
     refresh();
 }
 
-void display_color_menu(int old_option, int new_option, int prev_player, int curr_player, char logo[23][35], int avail){
+void display_color_menu(int old_option, int new_option, int prev_player, int curr_player, char logo[23][35], int avail[4], option * players){
     int lmarg = 18,
             tmarg = 26;
     int i, n_commands=4;
 
-    if (old_option == -1) {
+    if (old_option == -1 || prev_player!=curr_player) {
         set_bckgd(2);
         add_logo(1, 9, logo);
+        add_chstring(26, 13, players[curr_player].tekst, 0, 1);
         for (i = 0; i < 4; i++)
         {
-
 
         }
     }
@@ -411,7 +455,6 @@ int pick_player_number(int * player_count,int * bot_count, int bot_level[2], cha
 }
 
 void newgame_menu(char logo[23][35], int colors[4]){
-
     // izbor broja igraca
     int new_option=0,old_option=-1, key;
     int player_count=0, bot_count=-1, bot_level[2]={0};
@@ -423,8 +466,20 @@ void newgame_menu(char logo[23][35], int colors[4]){
     return;
 }
 
-void pick_colors(int colors[4]){
+void pick_colors(int * colors[4], char logo[23][35]){
+    option players[4]; int old_option=-1, new_option=0, prevplayer=0, currplayer=0, key;
+    int avail[4]={0};
+    players[0].tekst=strtoch("Player 1");
+    players[1].tekst=strtoch("Player 2");
+    players[2].tekst=strtoch("Bot 1   ");
+    players[3].tekst=strtoch("Bot 2   ");
+    display_color_menu(old_option,new_option, prevplayer, currplayer,logo, avail, players);
+    while (currplayer!=4){
+        key=getch();
+        switch (key){
 
+        }
+    }
 }
 
 void high_scores(){
