@@ -159,8 +159,8 @@ void display_main_menu(int old_option, int new_option, option * commands, char l
 }
 
 void display_color_menu(int old_option, int new_option, int prev_player, int curr_player, char logo[23][35], int avail[4], option * players){
-    int lmarg = 18,
-            tmarg = 26;
+    int lmarg = 13,
+            tmarg = 28;
     int i, n_commands=4;
 
     if (old_option == -1 || prev_player!=curr_player) {
@@ -169,8 +169,10 @@ void display_color_menu(int old_option, int new_option, int prev_player, int cur
         add_chstring(26, 13, players[curr_player].tekst, 0, 1);
         for (i = 0; i < 4; i++)
         {
-
+            addsqr(lmarg+(i%2)*5, tmarg+(i>1)?5:0,3,i,avail[i]);
         }
+        i=0; while (avail[i]) i++;
+        //addsqr ovde si stala
     }
     else {
 
