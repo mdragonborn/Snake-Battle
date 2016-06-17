@@ -122,13 +122,14 @@ void display_color_menu(int old_option, int new_option, int prev_player, int cur
     if (old_option == -1) {
         set_bckgd(2);
         add_logo(1, 9, logo);
-        for (i = 0; i < n_commands; i++)
+        for (i = 0; i < 4; i++)
         {
 
 
         }
     }
     else {
+
     }
     refresh();
 }
