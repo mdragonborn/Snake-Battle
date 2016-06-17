@@ -114,7 +114,7 @@ void display_main_menu(int old_option, int new_option, option * commands, char l
     refresh();
 }
 
-void display_color_menu(int old_option, int new_option, int prev_player, int curr_player char logo[23][35], int avail){
+void display_color_menu(int old_option, int new_option, int prev_player, int curr_player, char logo[23][35], int avail){
     int lmarg = 18,
             tmarg = 26;
     int i, n_commands=4;
@@ -129,8 +129,6 @@ void display_color_menu(int old_option, int new_option, int prev_player, int cur
         }
     }
     else {
-        add_chstring(tmarg+old_option+1,lmarg,dot, 2, 0);
-        add_chstring(tmarg+new_option+1,lmarg,selected, 2, 0);
     }
     refresh();
 }

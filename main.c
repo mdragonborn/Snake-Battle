@@ -9,7 +9,7 @@ int main() {
     colors[0]=1; colors[1]=2; colors[2]=3; colors[3]=4;
     commands[0].tekst = strtoch("Nova igra");
     commands[1].tekst = strtoch("High scores");
-    commands[2].tekst = strtoch("Podešavanja");
+    commands[2].tekst = strtoch("Podesavanja");
     commands[3].tekst = strtoch("Demo");
     commands[4].tekst = strtoch("About");
     commands[5].tekst = strtoch("Izlaz");
