@@ -350,7 +350,7 @@ void update_map(board map, coord *current) {
     int i;
 
     for (i = 0; i < 4; i++) {
-        if (current[i].blank != 1) map.brd[current[i].x][current[i].y] = i + 1;
+        if (current[i].blank != 1 && current[i].x != -1) map.brd[current[i].x][current[i].y] = i + 1;
     }
 
 
@@ -419,9 +419,9 @@ coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives
     }
 
     for (i = 0; i < (2 - br_botova); i++) {
-        new[i + 2].x = -1;
-        new[i + 2].y = -1;
-        new[i + 2].dir = -1;
+        new[3-i].x = -1;
+        new[3-i].y = -1;
+        new[3-i].dir = -1;
     }
 
     update_map(map, new);
