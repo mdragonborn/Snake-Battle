@@ -34,7 +34,7 @@ typedef struct next_move_with_delay {
     double delay;
 }next_m;
 
-next_m next_move(board map, coord* current, int moves, int* lives);
+next_m next_move(board map, coord* current, int moves, int* lives, int* prev_lives);
 coord* initialise(board map, int br_botova, int br_igraca, int moves, int* lives);
 void copy_coord(coord * source, coord * target);
 board reset_board(board map);
@@ -43,7 +43,7 @@ int* check_death(board map, coord current[4], int* lives);
 board make_map(int n);
 void print_board(board map);
 coord zero_case(coord current);
-coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, board map, int* lives);
+coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, board map, int* lives, int* prev_lives);
 int game_over(int* lives);
 void update_map(board map, coord* current);
 int skreci(int **brd,int x,int y,int dir);

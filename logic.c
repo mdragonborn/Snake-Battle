@@ -86,7 +86,7 @@ void error() {
     exit(1);
 }
 
-next_m next_move(board map, coord *current, int moves, int* lives) {
+next_m next_move(board map, coord *current, int moves, int* lives, int* prev_lives) {
     next_m vrati;
     int input, hor1, hor2;
     double TIMEOUT;
@@ -108,7 +108,7 @@ next_m next_move(board map, coord *current, int moves, int* lives) {
     if (vrati.delay < 0) vrati.delay = TIMEOUT;
     hor1 = (current[0].dir == 1 || current[0].dir == 3);
     hor2 = (current[1].dir == 1 || current[1].dir == 3);
-    vrati.next = move_player(current, input, hor1, hor2, moves, map, lives);
+    vrati.next = move_player(current, input, hor1, hor2, moves, map, lives, prev_lives);
 
     return vrati;
 }
@@ -207,11 +207,35 @@ coord zero_case(coord current) {
     }
     return new;
 }
+int* is_in_wall(coord* current, board map){
+    int i;
+    int* vrati;
 
-coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, board map, int* lives) {
+    vrati = calloc(sizeof(int), 4);
+    for (i = 0; i < 4; i++){
+        if (current[i].x == 0 || current[i].y == 0 || current[i].x == (map.n + 1) || current[i].y == (map.n + 1)){
+            vrati[i] = 1;
+        }
+        else vrati[i] = 0;
+    }
+    return vrati;
+}
+
+int* did_just_die(int* prev_lives, int* lives){
+
+    int* vrati;
+    int i;
+    vrati = calloc(sizeof(int), 4);
+    for (i = 0; i < 4; i++) vrati[i] = lives[i] ^ prev_lives[i];
+    return vrati;
+
+}
+coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, board map, int* lives, int* prev_lives) {
 
     coord *new_coord;
     coord *backup;
+    int *overwrite;
+    int* wall;
     int i;
     new_coord = malloc(sizeof(coord) * 4);
     backup = calloc(sizeof(coord), 4);
@@ -326,8 +350,10 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
         else new_coord[0] = current[0];
     }
     check_death(map, new_coord, lives);
+    overwrite = did_just_die(prev_lives, lives);
+    wall = is_in_wall(new_coord, map);
     for (i = 0; i < 4; i++){
-        if (lives[i] == 0){
+        if ((lives[i] == 0 && !overwrite[i]) || wall[i]){
             new_coord[i] = backup[i];
         }
     }
@@ -425,7 +451,7 @@ coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives
     }
 
     update_map(map, new);
-    new = move_player(new, 0, 0, 0, moves, map, lives );
+    new = move_player(new, 0, 0, 0, moves, map, lives, lives);
     update_map(map, new);
 
 
