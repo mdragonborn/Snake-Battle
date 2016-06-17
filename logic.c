@@ -9,7 +9,7 @@
 #include <math.h>
 #include "mtwist.h"
 
-int keepgoing(const int**brd,int x, int y,int dir){
+int keepgoing( int**brd,int x, int y,int dir){
     int i;
 
     switch(dir) {
@@ -350,7 +350,7 @@ void update_map(board map, coord *current) {
     int i;
 
     for (i = 0; i < 4; i++) {
-        if (current[i].blank != 1 && current[i].x != -1) map.brd[current[i].x][current[i].y] = i + 1;
+        if (current[i].blank != 1) map.brd[current[i].x][current[i].y] = i + 1;
     }
 
 
