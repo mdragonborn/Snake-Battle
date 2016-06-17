@@ -46,9 +46,7 @@ coord zero_case(coord current);
 coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, board map, int* lives, int* prev_lives);
 int game_over(int* lives);
 void update_map(board map, coord* current);
-int skreci(int **brd,int x,int y,int dir);
-coord mediumbotint (int x, int y, int dir, int **brd);
-int keepgoing(int**brd,int x, int y,int dir);
+
 int players_dead(int* lives);
 
 #endif //PROJEKAT_LOGIC_H

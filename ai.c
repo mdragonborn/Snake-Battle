@@ -4,6 +4,7 @@
 #include "ai.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 
 void initq(r *red) {
@@ -38,78 +39,18 @@ coord delete(r *red) {
     coord x;
     if (red->front == 0) {
         printf("Underflow q");
-        return -1;
     }
     else{
         x = red->q[red->front];
         if (red->front == red->rear) { red->front = red->rear = 0; }
         else {
 
-            red->front = red->(front + 1) % 300;
+            red->front = (red->front + 1) % 300;
         }
         return x;
     }
 }
 
-
-
-
-coord *easybot(int x, int y, int dir, int moves, const int **brd) {
-    int i, rez;
-    coord out;
-
-    srand(time(NULL));
-    if (x != -1 && y != -1) {
-        if (moves < 4) {
-            switch (dir) {
-                case 0:
-                    if (brd[x - 1][y] == 0)rez = 0;
-                    break;
-                case 1:
-                    if (brd[x][y + 1] == 0)rez = 1;
-                    break;
-                case 2:
-                    if (brd[x + 1][y] == 0)rez = 2;
-                    break;
-                case 3:
-                    if (brd[x][y - 1] == 0)rez = 3;
-                    break;
-                default:
-                    skreci(brd, x, y, dir);
-            }
-        }
-        else {
-            i = rand() / (RAND_MAX + 1) * 4 + 1;
-            rez = i;
-        }
-    }
-    else rez = -1;
-
-    out.dir = rez;
-    switch (rez) {
-        case 0: {
-            out.x = x - 1;
-            out.y = y;
-            break;
-        }
-        case 1: {
-            out.x = x;
-            out.y = y + 1;
-            break;
-        }
-        case 2: {
-            out.x = x + 1;
-            out.y = y;
-            break;
-        }
-        case 3: {
-            out.x = x;
-            out.y = y - 1;
-            break;
-        }
-    }
-    return out;
-}
 
 int skreci(const int **brd, int x, int y, int dir) {
     if (brd[x - 1][y] == 0)return 0;
@@ -120,7 +61,7 @@ int skreci(const int **brd, int x, int y, int dir) {
 }
 
 
-int keepgoing(const int **brd, int x, int y, int dir) {
+int keepgoing(int **brd, int x, int y, int dir) {
     int i;
 
     switch (dir) {
@@ -140,54 +81,37 @@ int keepgoing(const int **brd, int x, int y, int dir) {
     return -1;
 }
 
-
-coord *mediumbot(const int **brd, int x, int y, int dir) {       //pozivam za oba bota pojedinacno
-    int i, skup[4], j;
+coord mediumbot(int x, int y, int dir, int **brd){       //pozivam za oba bota pojedinacno
+    int i,skup[4],j;
     coord out;
-    srand(time(NULL));
+    int rez;
 
-    i = keepgoing(brd, x, y, dir);
-    if (i >= 0)rez = i;
+
+    i=keepgoing(brd,x,y,dir);
+    if(i>=0)rez=i;
     else {
         i = -1;
-        if (brd[x - 1][y] == 0)skup[++i] = 0;
-        if (brd[x][y + 1] == 0)skup[++i] = 1;
-        if (brd[x + 1][y] == 0)skup[++i] = 2;
-        if (brd[x][y - 1] == 0)skup[++i] = 3;
+        if (brd[x - 1][y] == 0 && dir != 2)skup[++i] = 0;
+        if (brd[x][y + 1] == 0 && dir != 3)skup[++i] = 1;
+        if (brd[x + 1][y] == 0 && dir != 0)skup[++i] = 2;
+        if (brd[x][y - 1] == 0 && dir != 1)skup[++i] = 3;
 
-        j = rand() / (MAX_RAND + 1) * (i + 1);
-        rez = skup[j];
-        if (i == -1)rez = dir;
+        j=rand()/(double)(RAND_MAX+1)*(i+1);
+        rez=skup[j];
+        if (i == -1) rez = dir;
+
     }
-    out.dir = rez;
-    switch (rez) {
-        case 0: {
-            out.x = x - 1;
-            out.y = y;
-            break;
-        }
-        case 1: {
-            out.x = x;
-            out.y = y + 1;
-            break;
-        }
-        case 2: {
-            out.x = x + 1;
-            out.y = y;
-            break;
-        }
-        case 3: {
-            out.x = x;
-            out.y = y - 1;
-            break;
-        }
+    out.dir=rez;
+    switch(rez){
+        case 0:{out.x=x-1; out.y=y; break;}
+        case 1:{out.x=x; out.y=y+1;break;}
+        case 2:{out.x=x+1; out.y=y; break;}
+        case 3:{out.x=x; out.y=y-1; break;}
     }
 
     return out;
 }
 
-
-//vraca 0 ako ne moze i 1 ako moze
 int check(int i, int j, int **map, int id, int t[5]) {  //prosledjujem koordinate polja na koje treba da upisem vrednost
     // id je broj kojim se popunjava kretanje te zmije po mapi
 
@@ -255,7 +179,7 @@ void findspace(board b, coord *s, int **map, sume *s1, sume *s2, sume *s3, sume 
     int t[5] = {0}, k, i, j, max1, max2;
 
 
-    for (k = 1; k < s.m; k++) {
+    for (k = 1; k < b.n; k++) {
         if (s[0].x != -1) {
             prosiri(map, s[0].x, s[0].y, k, s1, 1, t, b.n);
             t[1] = 1;
@@ -366,54 +290,6 @@ int issurrounded(int x, int y, int dir, int **map, board s) {
     return 1;
 }
 
-coord gotoedges(int **brd, coord out, int n) {         //pozivam samo neposredno cim provalim da je ogradjena
-    int a, b, x = out.x, y = out.y, dir = out.dir, di1, dir2;
-
-    if (y > n - y) {
-        dir1 = 1;
-        a = n - y;
-    }
-    else {
-        dir1 = 3;
-        a = y;
-    }
-
-    if (x > n - x) {
-        dir2 = 2;
-        b = n - x;
-    }
-    else {
-        dir2 = 0;
-        b = x;
-    }
-    if (a > b)dir = dir2;
-    else dir = dir1;
-
-    switch (dir) {
-        case 0: {
-            out.x = x - 1;
-            out.y = y;
-            break;
-        }
-        case 1: {
-            out.x = x;
-            out.y = y + 1;
-            break;
-        }
-        case 2: {
-            out.x = x + 1;
-            out.y = y;
-            break;
-        }
-        case 3: {
-            out.x = x;
-            out.y = y - 1;
-            break;
-        }
-    }
-    out.dir = dir;
-    return out;
-}
 
 int isclear(int **brd, int dir, int x, int y) {
     switch (dir) {
@@ -441,14 +317,14 @@ coord surrounded(int **brd, coord out) {
     int dir = out.dir, x = out.x, y = out.y, i;
 
     i = (dir + 1) % 4;
-    if (iscelar(brd, i, x, y) == 1)dir = i;
+    if (isclear(brd, i, x, y) == 1)dir = i;
     else {
         i = (dir) % 4;
-        if (iscelar(brd, i, x, y) == 1)dir = i;
+        if (isclear(brd, i, x, y) == 1)dir = i;
 
         else {
             i = (dir + 3) % 4;
-            if (iscelar(brd, i, x, y) == 1)dir = i;
+            if (isclear(brd, i, x, y) == 1)dir = i;
         }
     }
 
@@ -486,7 +362,7 @@ coord *hardbot(board b, coord *s, int **map, sume *suma) {
     sume s1, s2, s3, s4;
     coord *out;
     int i, j, dir1, dir2, dir;
-    out = calloc(2 * sizeof(coord));
+    out = calloc(2, sizeof(coord));
 
     if (s[2].x != -1) {
         if (issurrounded(s[2].x, s[2].y, s[2].dir, map, b) == 0) {
@@ -513,23 +389,23 @@ coord *hardbot(board b, coord *s, int **map, sume *suma) {
 
             switch (dir) {
                 case 0: {
-                    out[0].x = x - 1;
-                    out[0].y = y;
+                    out[0].x = s[0].x - 1;
+                    out[0].y = s[0].y;
                     break;
                 }
                 case 1: {
-                    out[0].x = x;
-                    out[0].y = y + 1;
+                    out[0].x = s[0].x;
+                    out[0].y = s[0].y + 1;
                     break;
                 }
                 case 2: {
-                    out[0].x = x + 1;
-                    out[0].y = y;
+                    out[0].x = s[0].x + 1;
+                    out[0].y = s[0].y;
                     break;
                 }
                 case 3: {
-                    out[0].x = x;
-                    out[0].y = y - 1;
+                    out[0].x = s[0].x;
+                    out[0].y = s[0].y - 1;
                     break;
                 }
             }
@@ -537,7 +413,7 @@ coord *hardbot(board b, coord *s, int **map, sume *suma) {
             out[0].dir = dir;
         }
         else{
-            out[0]=surrounded(brd,out);
+            out[0]=surrounded(b.brd,out[0]);
         }
 
     }
@@ -567,31 +443,31 @@ coord *hardbot(board b, coord *s, int **map, sume *suma) {
 
             switch (dir) {
                 case 0: {
-                    out[1].x = x - 1;
-                    out[1].y = y;
+                    out[1].x = s[1].x - 1;
+                    out[1].y = s[1].y;
                     break;
                 }
                 case 1: {
-                    out[1].x = x;
-                    out[1].y = y + 1;
+                    out[1].x = s[1].x;
+                    out[1].y = s[1].y + 1;
                     break;
                 }
                 case 2: {
-                    out[1].x = x + 1;
-                    out[1].y = y;
+                    out[1].x = s[1].x + 1;
+                    out[1].y = s[1].y;
                     break;
                 }
                 case 3: {
-                    out[1].x = x;
-                    out[1].y = y - 1;
+                    out[1].x = s[1].x;
+                    out[1].y = s[1].y - 1;
                     break;
                 }
             }
 
-            out[0].dir = dir;
+            out[1].dir = dir;
         }
         else{
-            out[0]=surrounded(brd,out);
+            out[1]=surrounded(b.brd,out[1]);
         }
 
     }
