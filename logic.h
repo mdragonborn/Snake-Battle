@@ -48,7 +48,7 @@ int game_over(int* lives);
 void update_map(board map, coord* current);
 int skreci(int **brd,int x,int y,int dir);
 coord mediumbotint (int x, int y, int dir, int **brd);
-int keepgoing(const int**brd,int x, int y,int dir);
+int keepgoing(int**brd,int x, int y,int dir);
 int players_dead(int* lives);
 
 #endif //PROJEKAT_LOGIC_H

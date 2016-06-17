@@ -9,7 +9,7 @@
 #include <math.h>
 #include "mtwist.h"
 
-int keepgoing(const int**brd,int x, int y,int dir){
+int keepgoing( int**brd,int x, int y,int dir){
     int i;
 
     switch(dir) {
@@ -419,9 +419,9 @@ coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives
     }
 
     for (i = 0; i < (2 - br_botova); i++) {
-        new[i + 2].x = -1;
-        new[i + 2].y = -1;
-        new[i + 2].dir = -1;
+        new[3-i].x = -1;
+        new[3-i].y = -1;
+        new[3-i].dir = -1;
     }
 
     update_map(map, new);
