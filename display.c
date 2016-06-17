@@ -470,7 +470,7 @@ void newgame_menu(char logo[23][35], int colors[4]){
     return;
 }
 
-void pick_colors(int * colors[4], char logo[23][35]){
+void pick_colors(int colors[4], char logo[23][35]){
     option players[4]; int old_option=-1, new_option=0, prevplayer=0, currplayer=0, key;
     int avail[4]={0};
     players[0].tekst=strtoch("Player 1");
@@ -482,21 +482,21 @@ void pick_colors(int * colors[4], char logo[23][35]){
         key=getch();
         switch (key){
             case KEY_UP:
-                if (new_option>1) {
+                if (new_option>1 && !avail[new_option%2]) {
                     old_option = new_option;
                     new_option = new_option % 2;
                     display_color_menu(old_option,new_option, prevplayer,currplayer,logo,avail,players);
                 }
                 break;
             case KEY_DOWN:
-                if (new_option>1) {
+                if (new_option>1 && !avail[new_option%2+1]) {
                     old_option = new_option;
-                    new_option = new_option % 2;
+                    new_option = new_option % 2+1;
                     display_color_menu(old_option,new_option, prevplayer,currplayer,logo,avail,players);
                 }
                 break;
             case KEY_LEFT:
-                if (new_option%2){
+                if (new_option%2 && !avail[new_option-1]){
                     old_option=new_option;
                     new_option--;
                     display_color_menu(old_option,new_option, prevplayer,currplayer,logo,avail,players);
@@ -510,6 +510,7 @@ void pick_colors(int * colors[4], char logo[23][35]){
                 }
                 break;
             case KEY_ENTER:
+                avail[currplayer]=new_option;
                 break;
         }
     }

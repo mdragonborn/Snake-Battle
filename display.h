@@ -38,7 +38,7 @@ void display_color_menu(int old_option, int new_option, int prev_player, int cur
 void init_map();
 void display_map(coord * current, coord * prev, int colors[4]);
 void newgame_menu(char logo[23][35], int colors[4]);
-void pick_colors(int * colors[4], char logo[23][35]);
+void pick_colors(int colors[4], char logo[23][35]);
 int pick_bot_levels(int * bot_count, int bot_level[2], char logo[23][35]);
 int pick_botcount(int * player_count, int * bot_count, int * bot_level,char logo[23][35]);
 int pick_player_number(int * player_count,int * bot_count, int bot_level[2], char logo[23][35]);

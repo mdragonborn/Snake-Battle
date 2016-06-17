@@ -61,7 +61,7 @@ int main() {
                         newgame_menu(logo, colors);
                         break;
                     case 2:
-                        pick_colors(&colors, logo);
+                        pick_colors(colors, logo);
                         break;
                     default:
                         break;
