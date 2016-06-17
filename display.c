@@ -3,9 +3,7 @@
 #include <curses.h>
 #include <string.h>
 #include "logic.h"
-#include "mtwist.h"
-#include <windows.h>
-#include <math.h>
+#include "playgame.h"
 
 #define winh 40
 #define winw 60
@@ -216,7 +214,7 @@ void display_map(coord * current, coord * prev, int col1, int col2){
     refresh();
 }
 
-int play_game(int player_count, int bot_count, int bot_level[2], int col1, int col2){
+/*int play_game(int player_count, int bot_count, int bot_level[2], int col1, int col2){
     int hor1, hor2, death, brojac, blank1, blank2, blank3, blank4;
     int *lives;
     int i;
@@ -282,7 +280,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int col1, int c
     }
 
 }
-
+*/
 /* stari play game int play_game(int player_count, int bot_count, int bot_level[2], int col1, int col2){
     int hor1, hor2, death, brojac, blank1, blank2;
     next_m next;

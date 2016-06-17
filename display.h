@@ -5,6 +5,8 @@
 #ifndef DEMOMENI_DISPLAY_H
 #define DEMOMENI_DISPLAY_H
 #include "logic.h"
+#include <curses.h>
+
 #define winh 37
 #define winw 52
 #define BGD 2
@@ -32,7 +34,6 @@ void add_logo(int top, int left, char logo[23][35]);
 void display_main_menu(int old_option, int new_option, option * commands, char logo[23][35], int n_commands);
 void init_map();
 void display_map(coord * current, coord * prev, int col1, int col2);
-int play_game(int player_count, int bot_count, int bot_level[2], int col1, int col2);
 void newgame_menu(char logo[23][35]);
 void high_scores();
 void demo_game();
