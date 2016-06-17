@@ -497,6 +497,8 @@ int pick_player_number(int * player_count,int * bot_count, int bot_level[2], cha
             if (back) {
                 back=0;
                 *player_count=0;
+                clear();
+                new_option=0; old_option=-1;
             }
             else return 0;
         }
