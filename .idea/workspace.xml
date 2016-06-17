@@ -11,7 +11,7 @@
     </ADDITIONAL_GENERATION_ENVIRONMENT>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b10d8dba-8cd2-4450-b646-5f74b0eb655d" name="Default" comment="error 462 fixed u funkciji medium bot">
+    <list default="true" id="b10d8dba-8cd2-4450-b646-5f74b0eb655d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/display.c" afterPath="$PROJECT_DIR$/display.c" />
     </list>
@@ -59,8 +59,8 @@
       <file leaf-file-name="display.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/display.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="26">
-              <caret line="492" column="22" selection-start-line="492" selection-start-column="22" selection-end-line="492" selection-end-column="22" />
+            <state relative-caret-position="326">
+              <caret line="277" column="9" selection-start-line="277" selection-start-column="9" selection-end-line="277" selection-end-column="9" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
                 <element signature="e#435#492#0" expanded="false" />
@@ -69,7 +69,7 @@
                 <element signature="e#1032#1415#0" expanded="false" />
                 <element signature="e#1417#1605#0" expanded="false" />
                 <element signature="e#1607#2269#0" expanded="false" />
-                <element signature="e#9130#10507#0" expanded="false" />
+                <element signature="e#9179#10556#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -416,6 +416,14 @@
       <option name="presentableId" value="Default" />
       <updated>1464783058717</updated>
     </task>
+    <task id="LOCAL-00001" summary="popravljen clear screen kad se ide nazad sa izbora broja botova">
+      <created>1466188967813</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1466188967813</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -455,7 +463,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="error 462 fixed u funkciji medium bot" />
-    <option name="LAST_COMMIT_MESSAGE" value="error 462 fixed u funkciji medium bot" />
+    <MESSAGE value="popravljen clear screen kad se ide nazad sa izbora broja botova" />
+    <option name="LAST_COMMIT_MESSAGE" value="popravljen clear screen kad se ide nazad sa izbora broja botova" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -811,8 +820,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/display.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="26">
-          <caret line="492" column="22" selection-start-line="492" selection-start-column="22" selection-end-line="492" selection-end-column="22" />
+        <state relative-caret-position="326">
+          <caret line="277" column="9" selection-start-line="277" selection-start-column="9" selection-end-line="277" selection-end-column="9" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
             <element signature="e#435#492#0" expanded="false" />
@@ -821,7 +830,7 @@
             <element signature="e#1032#1415#0" expanded="false" />
             <element signature="e#1417#1605#0" expanded="false" />
             <element signature="e#1607#2269#0" expanded="false" />
-            <element signature="e#9130#10507#0" expanded="false" />
+            <element signature="e#9179#10556#0" expanded="false" />
           </folding>
         </state>
       </provider>

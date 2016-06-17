@@ -276,6 +276,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int col1, int c
             update_map(map,next.next);
             //print_board(map);
         }
+        display_map(current,previous,col1,col2);
         free(previous); free(current);
         Sleep(1000);
     }
