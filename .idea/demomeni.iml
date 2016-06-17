@@ -6,10 +6,12 @@
       <sourceFolder url="file://$MODULE_DIR$/display.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/main.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/logic.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/logic.c" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/mtwist.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/playgame.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ai.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/playgame.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/playgame.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/mtwist.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ai.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/logic.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/mtwist.c" isTestSource="false" />
     </content>

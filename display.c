@@ -164,6 +164,7 @@ void display_color_menu(int old_option, int new_option, int prev_player, int cur
     int i, n_commands=4;
 
     if (old_option == -1 || prev_player!=curr_player) {
+        clear();
         set_bckgd(2);
         add_logo(1, 9, logo);
         add_chstring(26, 13, players[curr_player].tekst, 0, 1);
@@ -172,12 +173,13 @@ void display_color_menu(int old_option, int new_option, int prev_player, int cur
             addsqr(lmarg+(i%2)*5, tmarg+(i>1)?5:0,3,i,avail[i]);
         }
         i=0; while (avail[i]) i++;
-        //addsqr ovde si stala
+        updatesqr(tmarg+(i%2)*5-1, lmarg+(i>1)?5:0-1,tmarg+(i%2)*5-1, lmarg+(i>1)?5:0-1);
     }
     else {
-
+        updatesqr(tmarg+(old_option%2)*5-1, lmarg+(old_option>1)?5:0-1,tmarg+(new_option%2)*5-1, lmarg+(new_option>1)?5:0-1);
     }
     refresh();
+    return;
 }
 
 void init_map(){
@@ -479,7 +481,36 @@ void pick_colors(int * colors[4], char logo[23][35]){
     while (currplayer!=4){
         key=getch();
         switch (key){
-
+            case KEY_UP:
+                if (new_option>1) {
+                    old_option = new_option;
+                    new_option = new_option % 2;
+                    display_color_menu(old_option,new_option, prevplayer,currplayer,logo,avail,players);
+                }
+                break;
+            case KEY_DOWN:
+                if (new_option>1) {
+                    old_option = new_option;
+                    new_option = new_option % 2;
+                    display_color_menu(old_option,new_option, prevplayer,currplayer,logo,avail,players);
+                }
+                break;
+            case KEY_LEFT:
+                if (new_option%2){
+                    old_option=new_option;
+                    new_option--;
+                    display_color_menu(old_option,new_option, prevplayer,currplayer,logo,avail,players);
+                }
+                break;
+            case KEY_RIGHT:
+                if (!new_option%2){
+                    old_option=new_option;
+                    new_option--;
+                    display_color_menu(old_option,new_option, prevplayer,currplayer,logo,avail,players);
+                }
+                break;
+            case KEY_ENTER:
+                break;
         }
     }
 }
