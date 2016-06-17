@@ -88,7 +88,6 @@ void add_logo(int top, int left, char logo[23][35]){
 }
 
 
-
 void display_main_menu(int old_option, int new_option, option * commands, char logo[23][35], int n_commands)  //n_commands ???
 {
     chtype dot[]={'<', ' ' ,'>', ' ',0}, selected[]={'<',ACS_DIAMOND,'>', ' ',0};
@@ -115,6 +114,26 @@ void display_main_menu(int old_option, int new_option, option * commands, char l
     refresh();
 }
 
+void display_color_menu(int old_option, int new_option, int prev_player, int curr_player char logo[23][35], int avail){
+    int lmarg = 18,
+            tmarg = 26;
+    int i, n_commands=4;
+
+    if (old_option == -1) {
+        set_bckgd(2);
+        add_logo(1, 9, logo);
+        for (i = 0; i < n_commands; i++)
+        {
+
+
+        }
+    }
+    else {
+        add_chstring(tmarg+old_option+1,lmarg,dot, 2, 0);
+        add_chstring(tmarg+new_option+1,lmarg,selected, 2, 0);
+    }
+    refresh();
+}
 
 void init_map(){
     erase();
@@ -132,12 +151,12 @@ void init_map(){
     //samo stampu
 }
 
-void display_map(coord * current, coord * prev, int col1, int col2){
-    //chtype lines[]={ACS_URCORNER,ACS_ULCORNER,ACS_LRCORNER,ACS_LLCORNER,ACS_HLINE,ACS_VLINE};
+void display_map(coord * current, coord * prev, int colors[4]){
     int i, col;
     if (prev[0].x==prev[1].x && prev[0].x==0){
         for (i=0;i<4;i++) {
-            col=i+1;
+            if (current[i].x==-1) continue;
+            col=colors[i];
             switch (current[i].dir) {
                 case 0:
                     mvaddch(current[i].x + OFFX+1, current[i].y + OFFY, ACS_VLINE | COLOR_PAIR(col) | A_BOLD);
@@ -164,7 +183,8 @@ void display_map(coord * current, coord * prev, int col1, int col2){
     else{
         chtype next;
         for(i=0;i<4;i++){
-            col=i+1;
+            if (current[i].x==-1) continue;
+            col=colors[i];
             if (prev[i].blank!=1) switch(current[i].dir){
                     case 0:{
                         switch(prev[i].dir){
@@ -391,7 +411,7 @@ int pick_player_number(int * player_count,int * bot_count, int bot_level[2], cha
     }
 }
 
-void newgame_menu(char logo[23][35]){
+void newgame_menu(char logo[23][35], int colors[4]){
 
     // izbor broja igraca
     int new_option=0,old_option=-1, key;
@@ -399,9 +419,13 @@ void newgame_menu(char logo[23][35]){
     int back=pick_player_number(&player_count,&bot_count,bot_level,logo);
     if (back) return;
     else
-        play_game(player_count, bot_count, bot_level, 1, 2);
+        play_game(player_count, bot_count, bot_level, colors);
     //high score update ???
     return;
+}
+
+void pick_colors(int colors[4]){
+
 }
 
 void high_scores(){

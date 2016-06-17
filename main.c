@@ -4,13 +4,16 @@
 
 int main() {
     WINDOW * win;
-    option commands[5];
+    option commands[6];
+    int colors[4];
+    colors[0]=1; colors[1]=2; colors[2]=3; colors[3]=4;
     commands[0].tekst = strtoch("Nova igra");
     commands[1].tekst = strtoch("High scores");
-    commands[2].tekst = strtoch("Demo");
-    commands[3].tekst = strtoch("About");
-    commands[4].tekst = strtoch("Izlaz");
-    int options = 5;
+    commands[2].tekst = strtoch("Podešavanja");
+    commands[3].tekst = strtoch("Demo");
+    commands[4].tekst = strtoch("About");
+    commands[5].tekst = strtoch("Izlaz");
+    int options = 6;
     //logo = load_logo();
     char logo[23][35]={"....[[[[[[[[......................\n",
             "....[......[......................\n",
@@ -55,7 +58,10 @@ int main() {
                     case 4:
                         exit(0);
                     case 0:
-                        newgame_menu(logo);
+                        newgame_menu(logo, colors);
+                        break;
+                    case 2:
+                        pick_colors(colors);
                         break;
                     default:
                         break;
