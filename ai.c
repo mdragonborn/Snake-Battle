@@ -358,7 +358,7 @@ coord surrounded(int **brd, coord out) {
 
 
 
-coord *hardbot(board b, coord *s, int **map, sume *suma) {
+coord *hardbot(board b, coord *s, int **map) {
     sume s1, s2, s3, s4;
     coord *out;
     int i, j, dir1, dir2, dir;

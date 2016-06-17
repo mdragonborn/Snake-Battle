@@ -36,7 +36,7 @@ int ishead(board s, int x, int y);
 int issurrounded(int x, int y, int dir, int **map, board s);
 int isclear(int **brd, int dir, int x, int y);
 coord surrounded(int **brd, coord out);
-coord *hardbot(board b, coord *s, int **map, sume *suma);
+coord *hardbot(board b, coord *s, int **map);
 
 
 

@@ -8,51 +8,8 @@
 #include <conio.h>
 #include <math.h>
 #include "mtwist.h"
+#include "ai.h"
 
-int keepgoing( int**brd,int x, int y,int dir){
-    int i;
-
-    switch(dir) {
-        case 0: if(brd[x-1][y]==0)return 0; break;
-        case 1: if(brd[x][y+1]==0)return 1; break;
-        case 2: if(brd[x+1][y]==0)return 2; break;
-        case 3: if(brd[x][y-1]==0)return 3; break;
-    }
-    return -1;
-}
-
-
-
-coord mediumbot(int x, int y, int dir, int **brd){       //pozivam za oba bota pojedinacno
-    int i,skup[4],j;
-    coord out;
-    int rez;
-
-
-    i=keepgoing(brd,x,y,dir);
-    if(i>=0)rez=i;
-    else {
-        i = -1;
-        if (brd[x - 1][y] == 0 && dir != 2)skup[++i] = 0;
-        if (brd[x][y + 1] == 0 && dir != 3)skup[++i] = 1;
-        if (brd[x + 1][y] == 0 && dir != 0)skup[++i] = 2;
-        if (brd[x][y - 1] == 0 && dir != 1)skup[++i] = 3;
-
-        j=rand()/(double)(RAND_MAX+1)*(i+1);
-        rez=skup[j];
-        if (i == -1) rez = dir;
-
-    }
-    out.dir=rez;
-    switch(rez){
-        case 0:{out.x=x-1; out.y=y; break;}
-        case 1:{out.x=x; out.y=y+1;break;}
-        case 2:{out.x=x+1; out.y=y; break;}
-        case 3:{out.x=x; out.y=y-1; break;}
-    }
-
-    return out;
-}
 
 void copy_coord(coord *source, coord *target) {
     int i;
@@ -236,17 +193,33 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
     coord *backup;
     int *overwrite;
     int* wall;
-    int i;
+    int** kopija;
+    coord* hard_botovi;
+    int i, j, k;
     new_coord = malloc(sizeof(coord) * 4);
     backup = calloc(sizeof(coord), 4);
     copy_coord(current, backup);
     new_coord[0] = current[0];
     new_coord[1] = current[1];
+    kopija = malloc(sizeof(int *) * (map.n + 2));
+    if (kopija == NULL) error();
+    for (i = 0; i < map.n + 2; i++) {
+        kopija[i] = malloc(sizeof(int) * (map.n + 2));
+        for (k = 0; k < map.n + 2; k++){
+            kopija[i][k] = map.brd[i][k];
+        }
+        if (kopija[i] == NULL) {
+            kopija = NULL;
+            error();
+            break;
+        }
+    }
 
-    if (lives[2] != 0) new_coord[2] = mediumbot(current[2].x, current[2].y, current[2].dir, map.brd);
+    hard_botovi = hardbot(map, current, kopija);
+    if (lives[2] != 0) new_coord[2] = hard_botovi[0];
     else new_coord[2] = current[2];
 
-    if (lives[3] != 0) new_coord[3] = mediumbot(current[3].x, current[3].y, current[3].dir, map.brd);
+    if (lives[3] != 0) new_coord[3] = hard_botovi[0];
     else new_coord[3] = current[3];
     if (input == 224 && current[1].x != -1) {
         input = _getch();
