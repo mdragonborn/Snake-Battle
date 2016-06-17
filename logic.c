@@ -218,12 +218,13 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
     copy_coord(current, backup);
     new_coord[0] = current[0];
     new_coord[1] = current[1];
+
     if (lives[2] != 0) new_coord[2] = mediumbot(current[2].x, current[2].y, current[2].dir, map.brd);
     else new_coord[2] = current[2];
 
     if (lives[3] != 0) new_coord[3] = mediumbot(current[3].x, current[3].y, current[3].dir, map.brd);
     else new_coord[3] = current[3];
-    if (input == 224) {
+    if (input == 224 && current[1].x != -1) {
         input = _getch();
         if (lives[0] != 0) new_coord[0] = zero_case(current[0]);
         else new_coord[0] = current[0];
@@ -274,8 +275,10 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
         else new_coord[1] = current[1];
     }
     else if (input != A && input != S && input != D && input != W) {
-        new_coord[0] = zero_case(current[0]);
-        new_coord[1] = zero_case(current[1]);
+        if (current[0].x != -1)
+            new_coord[0] = zero_case(current[0]);
+        if (current[1].x != -1)
+            new_coord[1] = zero_case(current[1]);
     }
     else {
         if (lives[1] != 0) new_coord[1] = zero_case(current[1]);

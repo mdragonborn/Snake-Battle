@@ -17,10 +17,14 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     time_t t;
 
     lives = calloc(sizeof(int), 4);
-    for (i = 0; i <4; i++) lives[i] = 1;
+    for (i = 0; i < 4; i++) lives[i] = 0;
+    for (i = 0; i < player_count; i++) lives[i] = 1;
+    for (i = 0; i < bot_count; i++) lives[i+2] = 1;
 
     while (1) {
-        for (i = 0; i <4; i++) lives[i] = 1;
+        for (i = 0; i < 4; i++) lives[i] = 0;
+        for (i = 0; i < player_count; i++) lives[i] = 1;
+        for (i = 0; i < bot_count; i++) lives[i+2] = 1;
         blank1 = blank2 = blank3 = blank4 = 0;
         brojac = 0;
         map = reset_board(map);
