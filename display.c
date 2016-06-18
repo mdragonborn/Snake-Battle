@@ -205,13 +205,14 @@ void init_map(){
 
 void display_map(coord * current, coord * prev, int colors[4], char * time){
     int i, col;
+    int color_options[]={BLUE_BLACK,GREEN_BLACK,RED_BLACK,WHITE_BLACK};
     chtype * timech=strtoch(time);
     add_chstring(4, MAP_SIZE+2,timech,1,0);
     free(timech);
     if (prev[0].x==prev[1].x && prev[0].x==0){
         for (i=0;i<4;i++) {
             if (current[i].x==-1) continue;
-            col=colors[i];
+            col=color_options[colors[i]];
             switch (current[i].dir) {
                 case 0:
                     mvaddch(current[i].x + OFFX+1, current[i].y + OFFY, ACS_VLINE | COLOR_PAIR(col) | A_BOLD);
@@ -239,7 +240,7 @@ void display_map(coord * current, coord * prev, int colors[4], char * time){
         chtype next;
         for(i=0;i<4;i++){
             if (current[i].x==-1) continue;
-            col=colors[i];
+            col=color_options[colors[i]];
             if (prev[i].blank!=1) switch(current[i].dir){
                     case 0:{
                         switch(prev[i].dir){
