@@ -162,26 +162,24 @@ void display_main_menu(int old_option, int new_option, option * commands, char l
     refresh();
 }
 
-void display_color_menu(int old_option, int new_option, int prev_player, int curr_player, char logo[23][35], int avail[4], option * players){
-    int lmarg = (winw)/2,
+void display_color_menu(int old_option, int new_option, int prev_player, int curr_player, char logo[23][35], int avail[4]){
+    int lmarg = (winw-16)/2,
             tmarg = 40;
     int color_options[]={BLUE_BLACK,GREEN_BLACK,RED_BLACK,WHITE_BLACK};
-    int i, n_commands=4;
-
+    int i;
     if (old_option == -1 || prev_player!=curr_player) {
         clear();
         set_bckgd(2);
-        add_logo(10, lmarg-10, logo);
-        add_chstring(26, 13, players[curr_player].tekst, 0, 1);
+        add_logo(10, (winw-17)/2-10, logo);
         for (i = 0; i < 4; i++)
         {
-            addsqr(lmarg+(i%2)*5, tmarg+((i>1)?5:0),3,color_options[i],avail[i]);
+            addsqr(tmarg+((i>1)?5:0), lmarg+(i%2)*5,3,color_options[i],avail[i]);
         }
         i=0; while (avail[i]) i++;
-        updatesqr(tmarg+(i%2)*5-1, lmarg+(i>1)?5:0-1,tmarg+(i%2)*5-1, lmarg+(i>1)?5:0-1);
+        updatesqr(tmarg+((i>1)?5:0)-1,lmarg+(i%2)*5-1, tmarg+((i>1)?5:0)-1, lmarg+(i%2)*5-1);
     }
     else {
-        updatesqr(tmarg+(old_option%2)*5-1, lmarg+(old_option>1)?5:0-1,tmarg+(new_option%2)*5-1, lmarg+(new_option>1)?5:0-1);
+        updatesqr(tmarg+((old_option>1)?5:0)-1,lmarg+(old_option%2)*5-1, tmarg+((new_option>1)?5:0)-1, lmarg+(new_option%2)*5-1);
     }
     refresh();
     return;
@@ -480,49 +478,82 @@ void newgame_menu(char logo[23][35], int colors[4]){
 }
 
 void pick_colors(int colors[4], char logo[23][35]){
-    option players[4]; int old_option=-1, new_option=0, prevplayer=0, currplayer=0, key;
+    option players[4]; int old_option=-1, new_option=0, prevplayer=0, currplayer=0, key, i;
     int avail[4]={0};
-    players[0].tekst=strtoch("Player 1");
-    players[1].tekst=strtoch("Player 2");
-    players[2].tekst=strtoch("Bot 1   ");
-    players[3].tekst=strtoch("Bot 2   ");
-    display_color_menu(old_option,new_option, prevplayer, currplayer,logo, avail, players);
+    players[0].tekst=strtoch("Player 1 - WASD");
+    players[1].tekst=strtoch("Player 2 - Arrows");
+    players[2].tekst=strtoch("Bot 1");
+    players[3].tekst=strtoch("Bot 2");
+    display_color_menu(old_option,new_option, prevplayer, currplayer,logo, avail);
     while (currplayer!=4){
+        add_chstring(34, 30,players[currplayer].tekst,BGD,1);
         key=getch();
         switch (key){
-            case KEY_UP:
+            case KEY_UP: case 'w': case 'W':
                 if (new_option>1 && !avail[new_option%2]) {
                     old_option = new_option;
                     new_option = new_option % 2;
-                    display_color_menu(old_option,new_option, prevplayer,currplayer,logo,avail,players);
+                    display_color_menu(old_option,new_option, prevplayer,currplayer,logo,avail);
                 }
                 break;
-            case KEY_DOWN:
-                if (new_option>1 && !avail[new_option%2+1]) {
+            case KEY_DOWN: case 's': case 'S':
+                if (new_option<=1 && !avail[new_option%2+2]) {
                     old_option = new_option;
-                    new_option = new_option % 2+1;
-                    display_color_menu(old_option,new_option, prevplayer,currplayer,logo,avail,players);
+                    new_option = new_option % 2+2;
+                    display_color_menu(old_option,new_option, prevplayer,currplayer,logo,avail);
+                }
+                else if (new_option<=1 && avail[0] && avail[3] && !avail[2] && !avail[1]){
+                    old_option=new_option; new_option=2;
+                    display_color_menu(old_option,new_option,prevplayer,currplayer,logo,avail);
+                }
+                else if (new_option<=1 && avail[1] && avail[2] && !avail[0] && !avail[3]){
+                    old_option=new_option; new_option=3;
+                    display_color_menu(old_option,new_option,prevplayer,currplayer,logo,avail);
                 }
                 break;
-            case KEY_LEFT:
+            case KEY_LEFT: case 'a': case 'A':
                 if (new_option%2 && !avail[new_option-1]){
                     old_option=new_option;
                     new_option--;
-                    display_color_menu(old_option,new_option, prevplayer,currplayer,logo,avail,players);
+                    display_color_menu(old_option,new_option, prevplayer,currplayer,logo,avail);
+                }
+                else if (new_option%2 && avail[0] && avail[3] && !avail[2] && !avail[1]){
+                    old_option=new_option; new_option=2;
+                    display_color_menu(old_option,new_option,prevplayer,currplayer,logo,avail);
+                }
+                else if (new_option%2 && avail[1] && avail[2] && !avail[0] && !avail[3]){
+                    old_option=new_option; new_option=0;
+                    display_color_menu(old_option,new_option,prevplayer,currplayer,logo,avail);
                 }
                 break;
-            case KEY_RIGHT:
-                if (!new_option%2){
+            case KEY_RIGHT: case 'd': case 'D':
+                if (!(new_option%2)&&!avail[new_option+1]){
                     old_option=new_option;
-                    new_option--;
-                    display_color_menu(old_option,new_option, prevplayer,currplayer,logo,avail,players);
+                    new_option++;
+                    display_color_menu(old_option,new_option, prevplayer,currplayer,logo,avail);
+                }
+                else if (!(new_option%2) && avail[0] && avail[3] && !avail[2] && !avail[1]){
+                    old_option=new_option; new_option=1;
+                    display_color_menu(old_option,new_option,prevplayer,currplayer,logo,avail);
+                }
+                else if (!(new_option%2) && avail[1] && avail[2] && !avail[0] && !avail[3]){
+                    old_option=new_option; new_option=3;
+                    display_color_menu(old_option,new_option,prevplayer,currplayer,logo,avail);
                 }
                 break;
-            case KEY_ENTER:
-                avail[currplayer]=new_option;
+            case KEY_ENTER: case 10: case 13: case 'e': case 'E':
+                avail[new_option]=1;
+                colors[currplayer]=new_option;
+                prevplayer=currplayer++;
+                if (currplayer==4) break;
+                i=0; while (avail[i]) i++; new_option=i;
+                display_color_menu(old_option,new_option,prevplayer,currplayer,logo,avail);
+                prevplayer=currplayer;
                 break;
+            default: break;
         }
     }
+    return;
 }
 
 void high_scores(){

@@ -85,7 +85,7 @@ int main() {
             case 's':
             case 'S':
             case KEY_DOWN:
-                if (new_select != 4) {
+                if (new_select != 5) {
                     past_select = new_select;
                     new_select++;
                     display_main_menu(past_select, new_select, commands, logo, options);
