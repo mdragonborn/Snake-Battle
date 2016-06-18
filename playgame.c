@@ -7,6 +7,7 @@
 #include <math.h>
 
 int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
+    int sound = 1;
     int hor1, hor2, death, brojac, blank1, blank2, blank3, blank4;
     int *lives, *prev_lives;
     int i;
@@ -20,6 +21,8 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     prev_lives = calloc(sizeof(int), 4);
 
     while (1) {
+
+        if (sound) PlaySound(TEXT("snake_battle_music.wav"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
         for (i = 0; i < 4; i++) lives[i] = 0;
         for (i = 0; i < player_count; i++) lives[i] = 1;
         for (i = 0; i < bot_count; i++) lives[i+2] = 1;
