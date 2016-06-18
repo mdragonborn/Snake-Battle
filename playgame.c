@@ -13,7 +13,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     int sound = 1;
     int hor1, hor2, death, brojac, blank1, blank2, blank3, blank4;
     int *lives, *prev_lives;
-    int i;
+    int i, E = 0;
     int pause = 0;
     double current_time = 0;
     int prva = 1;
@@ -42,7 +42,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
         map.heads = current;
         init_map();
         previous=(coord*)calloc(sizeof(coord),4);
-        display_map(current,previous,colors, map.timer);
+        display_map(current,previous,colors, map.timer, 0);
         Sleep(1000);
 
         while(1){
@@ -57,8 +57,14 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
                 blank3 = (int) rintl((mt_ldrand() * 9)) + 1;
                 blank4 = (int) rintl((mt_ldrand() * 9)) + 1;
             }
+            if (E == 0){
+                next=next_move(map,current, map.moves, lives, prev_lives, &sound, 0);
 
-            next=next_move(map,current, map.moves, lives, prev_lives, &sound);
+            }
+            else {
+                next=next_move(map,current, map.moves, lives, prev_lives, &sound, next.ee);
+            }
+            E = 1;
             if (next.delay == -32){
                 current_time += stop_timer(&t);
                 time_to_str(current_time, map.timer);
@@ -111,7 +117,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
                 copy_coord(current, previous);
                 copy_coord(next.next, current);
                 map.heads = next.next;
-                display_map(current, previous, colors, map.timer);
+                display_map(current, previous, colors, map.timer, next.ee);
                 update_map(map, next.next);
                 if (game_over(lives)) break;
 
@@ -120,7 +126,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
             prva = 0;
             stop_timer(&t);
         }
-        display_map(current,previous,colors, map.timer);
+        display_map(current,previous,colors, map.timer, next.ee);
         free(previous); free(current);
         Sleep(1000);
     }

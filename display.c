@@ -240,7 +240,7 @@ void display_map(coord * current, coord * prev, int colors[4], char * time, int 
         chtype next;
         for(i=0;i<4;i++){
             if (current[i].x==-1) continue;
-            col=color_options[colors[(ee)?(int)(rintl((mt_ldrand() * 3)) + 1):i]];
+            col=color_options[colors[(ee)?(int)(rintl((mt_ldrand() * 3))) : i]];
             if (prev[i].blank!=1) switch(current[i].dir){
                     case 0:{
                         switch(prev[i].dir){

@@ -11,7 +11,7 @@
 #include "ai.h"
 #include <Windows.h>
 #pragma comment(lib, "winmm.lib")
-
+extern E;
 void time_to_str(double x, char* timer){
     int pom;
     char pom2[4];
@@ -92,15 +92,14 @@ void error() {
     exit(1);
 }
 
-next_m next_move(board map, coord *current, int moves, int* lives, int* prev_lives, int* zvuk) {
-
+next_m next_move(board map, coord *current, int moves, int* lives, int* prev_lives, int* zvuk, int E) {
     next_m vrati;
     int input, hor1, hor2;
     double TIMEOUT;
     clock_t target, start, end;
 
     vrati.next = calloc(sizeof(coord), 4);
-    vrati.ee = 0;
+    vrati.ee = (E == 1) ? 1 : 0;
     input = 0;
     if (players_dead(lives))TIMEOUT = (0.01 * CLOCKS_PER_SEC);
     else TIMEOUT = (0.04 * CLOCKS_PER_SEC);
@@ -117,6 +116,7 @@ next_m next_move(board map, coord *current, int moves, int* lives, int* prev_liv
     hor1 = (current[0].dir == 1 || current[0].dir == 3);
     hor2 = (current[1].dir == 1 || current[1].dir == 3);
     if (input == 'm'){
+        vrati.ee = 0;
         if (*zvuk == 1) {
             PlaySound(NULL, NULL, 0);
             *zvuk = toggle(*zvuk);
@@ -133,21 +133,12 @@ next_m next_move(board map, coord *current, int moves, int* lives, int* prev_liv
     else if (input == 27){
         vrati.delay = -27;
     }
-    else if (input == '9'){
-        while (1) {
-            if (_kbhit()) {
-                input = _getch();
-                break;
-            }
-        }
-        if (input == '0'){
+
+    if (input != 'm'){
+        if (input == '9'){
             vrati.ee = 1;
             PlaySound(TEXT("snake_battle.wav"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
         }
-
-
-    }
-    else if (input != 'm'){
         vrati.next = move_player(current, input, hor1, hor2, moves, map, lives, prev_lives);
     }
 
