@@ -12,20 +12,53 @@
 #include <Windows.h>
 #pragma comment(lib, "winmm.lib")
 
-/*char* time_to_str(double t){
+void time_to_str(double x, char* timer){
     int pom;
-    char pom1[5];
-    char vrati[10];
-    pom = (int)((t) / 60000);
-    itoa(pom, pom1, 10);
+    char pom2[4];
 
+    pom = (((int)x) / 60000);
+    itoa(pom, pom2, 10);
+    timer[2] = ':';
+    timer[3] = '\0';
+    if (pom < 10){
+        timer[0] = '0';
+        timer[1] = pom2[0];
+    }
+    else {
+        timer[0] = '\0';
+        strcat(timer, pom2);
+    }
 
-    sek = (((unsigned long long)x % 60000) / 1000);
-    milisek = ((((unsigned long long)x) % 1000) / 100);
-    printf("%02.0lf:%02.0lf:%03.0lf", min, sek, milisek);
-    system("pause");
+    pom = (((int)x % 60000) / 1000);
+    itoa(pom, pom2, 10);
+    timer[5] = ':';
+    timer[6] = '\0';
 
-}*/
+    if (pom < 10) {
+        timer[3] = '0';
+        timer[4] = pom2[0];
+    }
+    else {
+        timer[3] = pom2[0];
+        timer[4] = pom2[1];
+    }
+    timer[9] = '\0';
+    pom = ((int)x % 1000);
+    itoa(pom, pom2, 10);
+    if (pom < 10){
+        timer[6] = timer[7] = '0';
+        timer[8] = pom2[0];
+    }
+    else if (pom < 100 ){
+        timer[6] = '0';
+        timer[7] = '\0';
+        strcat(timer, pom2);
+    }
+    else {
+        strcat(timer, pom2);
+    }
+}
+
 int toggle(int a){
     return a == 1 ? 0 : 1;
 }
@@ -159,6 +192,7 @@ board make_map(int n) {
             break;
         }
     }
+    map.timer = calloc(sizeof(char), 10);
     return map;
 
 }

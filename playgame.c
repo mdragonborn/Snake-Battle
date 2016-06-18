@@ -5,6 +5,7 @@
 #include "mtwist.h"
 #include <Windows.h>
 #include <math.h>
+#include "timers.h"
 #pragma comment(lib, "winmm.lib")
 
 int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
@@ -14,11 +15,13 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     int *lives, *prev_lives;
     int i;
     int pause = 0;
+    double current_time = 0;
+    int prva = 1;
     next_m next;
     coord * current, * previous;
     board map=make_map(MAP_SIZE);
 
-    time_t t;
+    Timer t;
 
     lives = calloc(sizeof(int), 4);
     prev_lives = calloc(sizeof(int), 4);
@@ -26,7 +29,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
 
 
     while (1) {
-
+        prva = 1;
         for (i = 0; i < 4; i++) lives[i] = 0;
         for (i = 0; i < player_count; i++) lives[i] = 1;
         for (i = 0; i < bot_count; i++) lives[i+2] = 1;
@@ -42,6 +45,8 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
         Sleep(1000);
 
         while(1){
+            if (!prva) current_time += stop_timer(&t);
+            time_to_str(current_time, map.timer);
             brojac = brojac % 10 + 1;
             map.moves++;
             if (brojac == 1){
@@ -79,6 +84,8 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
                 return 0;
             }
             if (next.delay != -32) {
+                start_timer(&t);
+
                 if (brojac == blank1) {
                     next.next[0].blank = 1;
                 }
@@ -104,6 +111,8 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
 
                 //print_board(map);
             }
+            prva = 0;
+            stop_timer(&t);
         }
         display_map(current,previous,colors);
         free(previous); free(current);
