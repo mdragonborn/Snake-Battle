@@ -29,6 +29,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
 
 
     while (1) {
+        current_time = 0;
         prva = 1;
         for (i = 0; i < 4; i++) lives[i] = 0;
         for (i = 0; i < player_count; i++) lives[i] = 1;
