@@ -22,7 +22,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     board map=make_map(MAP_SIZE);
 
     Timer t;
-
+    int pom_timer;
     lives = calloc(sizeof(int), 4);
     prev_lives = calloc(sizeof(int), 4);
     PlaySound(TEXT("snake_battle_music.wav"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
@@ -42,12 +42,13 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
         map.heads = current;
         init_map();
         previous=(coord*)calloc(sizeof(coord),4);
-        display_map(current,previous,colors);
+        display_map(current,previous,colors, map.timer);
         Sleep(1000);
 
         while(1){
             if (!prva) current_time += stop_timer(&t);
             time_to_str(current_time, map.timer);
+            start_timer(&t);
             brojac = brojac % 10 + 1;
             map.moves++;
             if (brojac == 1){
@@ -59,10 +60,15 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
 
             next=next_move(map,current, map.moves, lives, prev_lives, &sound);
             if (next.delay == -32){
+                current_time += stop_timer(&t);
+                time_to_str(current_time, map.timer);
                 //display sa pauzom
                 while (1) {
                     mode = getch();
-                    if (mode == 32) break;
+                    if (mode == 32) {
+                        start_timer(&t);
+                        break;
+                    }
                     else if (mode == 'm') {
                         if (sound) {
                             sound = toggle(sound);
@@ -85,7 +91,6 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
                 return 0;
             }
             if (next.delay != -32) {
-                start_timer(&t);
 
                 if (brojac == blank1) {
                     next.next[0].blank = 1;
@@ -106,7 +111,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
                 copy_coord(current, previous);
                 copy_coord(next.next, current);
                 map.heads = next.next;
-                display_map(current, previous, colors);
+                display_map(current, previous, colors, map.timer);
                 update_map(map, next.next);
                 if (game_over(lives)) break;
 
@@ -115,7 +120,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
             prva = 0;
             stop_timer(&t);
         }
-        display_map(current,previous,colors);
+        display_map(current,previous,colors, map.timer);
         free(previous); free(current);
         Sleep(1000);
     }
