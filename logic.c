@@ -42,21 +42,18 @@ void time_to_str(double x, char* timer){
         timer[3] = pom2[0];
         timer[4] = pom2[1];
     }
-    timer[9] = '\0';
-    pom = ((int)x % 1000);
+
+    pom = ((int)x % 1000) / 10;
     itoa(pom, pom2, 10);
     if (pom < 10){
-        timer[6] = timer[7] = '0';
-        timer[8] = pom2[0];
-    }
-    else if (pom < 100 ){
         timer[6] = '0';
-        timer[7] = '\0';
-        strcat(timer, pom2);
+        timer[7] = pom2[0];
     }
+
     else {
         strcat(timer, pom2);
     }
+    timer[8] = '\0';
 }
 
 int toggle(int a){
