@@ -215,11 +215,10 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
         }
     }
 
-    hard_botovi = hardbot(map, current, kopija);
-    if (lives[2] != 0) new_coord[2] = hard_botovi[0];
+    if (lives[2] != 0) new_coord[2] = mediumbot(current[2].x, current[2].y, current[2].dir, map.brd );
     else new_coord[2] = current[2];
 
-    if (lives[3] != 0) new_coord[3] = hard_botovi[0];
+    if (lives[3] != 0) new_coord[3] = mediumbot(current[3].x, current[3].y, current[3].dir, map.brd );
     else new_coord[3] = current[3];
     if (input == 224 && current[1].x != -1) {
         input = _getch();

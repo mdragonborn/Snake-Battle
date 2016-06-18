@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <curses.h>
 #include "display.h"
+#include "mtwist.h"
+#include <time.h>
 
 int main() {
     WINDOW * win;
@@ -42,7 +44,9 @@ int main() {
 // glavni meni
     int new_select = 0, past_select = -1;
     screen(winh, winw);
-
+    time_t t;
+    srand((unsigned)(time(&t)));
+    mt_seed();
     display_main_menu(past_select, new_select, commands, logo, options);
     int key = getch();
     while (key != 'Q' && key != 'q') {

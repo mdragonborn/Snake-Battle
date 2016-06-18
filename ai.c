@@ -112,9 +112,9 @@ coord mediumbot(int x, int y, int dir, int **brd){       //pozivam za oba bota p
     return out;
 }
 
-int check(int i, int j, int **map, int id, int t[5]) {  //prosledjujem koordinate polja na koje treba da upisem vrednost
+int check(int i, int j, int **map, int id, int t[5],int n) {  //prosledjujem koordinate polja na koje treba da upisem vrednost
     // id je broj kojim se popunjava kretanje te zmije po mapi
-
+    if(i >= n-1 || j>=n-1 || i <= 0 || j <= 0)return 2;
     if ((map[i - 1][j] == 1 || map[i - 1][j] == 2 || map[i - 1][j] == 3 || map[i - 1][j] == 4)) {
         if (map[i - 1][j] != id && t[map[i - 1][j]] == 0) return 0;        //ako to nije moja zmija i tek ce da se siri
     }
@@ -137,7 +137,7 @@ int check(int i, int j, int **map, int id, int t[5]) {  //prosledjujem koordinat
 void prosiri(int **map, int x, int y, int k, sume *suma, int id, int t[5], int n) {     //k je stepen kruga koji sirim
     int i, j, p, sf = 0;                     //sf je promeni smer i-ja
     for (j = y - k, i = x; j <= y + k; j++) {
-        p = check(i, j, map, id, t);
+        p = check(i, j, map, id, t,n);
         if (i > 0 && i <= n && j > 0 && j <= n) {
             if (map[i][j] == 0 && p == 1) {
                 map[i][j] = id;
@@ -155,7 +155,7 @@ void prosiri(int **map, int x, int y, int k, sume *suma, int id, int t[5], int n
     }
     //donji deo krsta
     for (j = y + k, i = x, sf = 0; j >= y - k; j--) {
-        p = check(i, j, map, id, t);
+        p = check(i, j, map, id, t,n);
         if (i > 0 && i <= n && j > 0 && j <= n) {
             if (map[i][j] == 0 && p == 1) {
                 map[i][j] = id;
@@ -216,6 +216,9 @@ int issurrounded(int x, int y, int dir, int **map, board s) {
     int i, j;
     coord tek;
 
+    red = malloc(sizeof (r));
+    initq(red);
+
     if (map[x - 1][y] == 0) insert(red, x - 1, y, 0);
     if (map[x][y + 1] == 0) insert(red, x, y + 1, 1);
     if (map[x + 1][y] == 0) insert(red, x + 1, y, 2);
@@ -223,7 +226,7 @@ int issurrounded(int x, int y, int dir, int **map, board s) {
 
     while (red->front != red->rear) {
         tek = delete(red);
-        if (i = ishead(s, tek.x, tek.y) == 1)return 0;
+        if ((i = ishead(s, tek.x, tek.y)) == 1)return 0;
         switch (tek.dir) {
             case 0: {
                 if (map[tek.x - 1][tek.y] == 0) {
@@ -287,6 +290,7 @@ int issurrounded(int x, int y, int dir, int **map, board s) {
             }
         }
     }
+    free(red);
     return 1;
 }
 
@@ -413,7 +417,7 @@ coord *hardbot(board b, coord *s, int **map) {
             out[0].dir = dir;
         }
         else{
-            out[0]=surrounded(b.brd,out[0]);
+            out[0]=surrounded(b.brd,s[2]);
         }
 
     }
@@ -467,8 +471,9 @@ coord *hardbot(board b, coord *s, int **map) {
             out[1].dir = dir;
         }
         else{
-            out[1]=surrounded(b.brd,out[1]);
+            out[1]=surrounded(b.brd,s[3]);
         }
 
     }
+    return out;
 }
