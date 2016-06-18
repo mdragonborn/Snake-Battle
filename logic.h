@@ -31,8 +31,10 @@ typedef struct board_with_dimens {
 
 typedef struct next_move_with_delay {
     coord* next;
+    char time[10];
     double delay;
 }next_m;
+
 int toggle(int a);
 next_m next_move(board map, coord* current, int moves, int* lives, int* prev_lives, int* zvuk);
 coord* initialise(board map, int br_botova, int br_igraca, int moves, int* lives);

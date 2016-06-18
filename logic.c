@@ -12,6 +12,20 @@
 #include <Windows.h>
 #pragma comment(lib, "winmm.lib")
 
+/*char* time_to_str(double t){
+    int pom;
+    char pom1[5];
+    char vrati[10];
+    pom = (int)((t) / 60000);
+    itoa(pom, pom1, 10);
+
+
+    sek = (((unsigned long long)x % 60000) / 1000);
+    milisek = ((((unsigned long long)x) % 1000) / 100);
+    printf("%02.0lf:%02.0lf:%03.0lf", min, sek, milisek);
+    system("pause");
+
+}*/
 int toggle(int a){
     return a == 1 ? 0 : 1;
 }
@@ -84,6 +98,9 @@ next_m next_move(board map, coord *current, int moves, int* lives, int* prev_liv
     }
     else if (input == 32){
         vrati.delay = -32;
+    }
+    else if (input == 27){
+        vrati.delay = -27;
     }
     else if (input != 'm'){
         vrati.next = move_player(current, input, hor1, hor2, moves, map, lives, prev_lives);

@@ -27,7 +27,6 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
 
     while (1) {
 
-
         for (i = 0; i < 4; i++) lives[i] = 0;
         for (i = 0; i < player_count; i++) lives[i] = 1;
         for (i = 0; i < bot_count; i++) lives[i+2] = 1;
@@ -68,8 +67,16 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
                             PlaySound(TEXT("snake_battle_music.wav"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
                         }
                     }
+                    else if (mode == 27){
+                        PlaySound(NULL, NULL, 0);
+                        return 0;
+                    }
                     continue;
                 }
+            }
+            else if (next.delay == -27){
+                PlaySound(NULL, NULL, 0);
+                return 0;
             }
             if (next.delay != -32) {
                 if (brojac == blank1) {
