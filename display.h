@@ -7,8 +7,8 @@
 #include "logic.h"
 #include <curses.h>
 
-#define winh 37
-#define winw 52
+#define winh 52
+#define winw 80
 #define BGD 2
 #define BGDC 6
 #define BOARD_SIZE 30
@@ -16,7 +16,7 @@
 #define WHITE_GREEN 1
 #define WHITE_RED 4
 #define WHITE_YELLOW 3
-#define MAP_SIZE 35
+#define MAP_SIZE 50
 #define OFFX 0
 #define OFFY 0
 #define fill 65584

@@ -3,9 +3,10 @@
 #include "display.h"
 #include "mtwist.h"
 #include <time.h>
+#include <Windows.h>
+#include <Wincon.h>
 
 int main() {
-    WINDOW * win;
     option commands[6];
     int colors[4];
     colors[0]=1; colors[1]=2; colors[2]=3; colors[3]=4;
@@ -16,7 +17,6 @@ int main() {
     commands[4].tekst = strtoch("About");
     commands[5].tekst = strtoch("Izlaz");
     int options = 6;
-    //logo = load_logo();
     char logo[23][35]={"....[[[[[[[[......................\n",
             "....[......[......................\n",
             "....[.####.[......................\n",

@@ -5,8 +5,8 @@
 #include "logic.h"
 #include "playgame.h"
 
-#define winh 40
-#define winw 60
+#define winh 52
+#define winw 80
 #define BGD 2
 #define BGDC 6
 #define BOARD_SIZE 30
@@ -14,7 +14,7 @@
 #define WHITE_GREEN 1
 #define WHITE_RED 4
 #define WHITE_YELLOW 3
-#define MAP_SIZE 35
+#define MAP_SIZE 50
 #define OFFX 0
 #define OFFY 0
 #define fill 65584
@@ -135,12 +135,12 @@ void add_logo(int top, int left, char logo[23][35]){
 void display_main_menu(int old_option, int new_option, option * commands, char logo[23][35], int n_commands)  //n_commands ???
 {
     chtype dot[]={'<', ' ' ,'>', ' ',0}, selected[]={'<',ACS_DIAMOND,'>', ' ',0};
-    int lmarg = 18,
-            tmarg = 26;
+    int lmarg = (winw-17)/2,
+            tmarg = 35;
     int i;
     if (old_option == -1) {
         set_bckgd(2);
-        add_logo(1, 9, logo);
+        add_logo(10, lmarg-10, logo);
         for (i = 0; i < n_commands; i++)
         {
             if (i==new_option)
@@ -515,6 +515,7 @@ void pick_colors(int colors[4], char logo[23][35]){
         }
     }
 }
+
 
 void high_scores(){
 
