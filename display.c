@@ -190,7 +190,17 @@ void display_color_menu(int old_option, int new_option, int prev_player, int cur
 void init_map(){
     erase();
     set_bckgd(1); int i, j;
-    for(i=0;i<MAP_SIZE+1;i++){
+    mvaddch(0,0,ACS_ULCORNER|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
+    mvaddch(0,MAP_SIZE+1,ACS_URCORNER|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
+    mvaddch(MAP_SIZE+1,0,ACS_LLCORNER|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
+    mvaddch(MAP_SIZE+1,MAP_SIZE+1,ACS_LRCORNER|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
+    for(i=1;i<=MAP_SIZE;i++) {
+        mvaddch(i, 0, ACS_VLINE | COLOR_PAIR(YELLOW_BLACK) | A_BOLD);
+        mvaddch(i, MAP_SIZE+1, ACS_VLINE | COLOR_PAIR(YELLOW_BLACK) | A_BOLD);
+        mvaddch(0, i, ACS_HLINE | COLOR_PAIR(YELLOW_BLACK) | A_BOLD);
+        mvaddch(MAP_SIZE+1,i, ACS_HLINE | COLOR_PAIR(YELLOW_BLACK) | A_BOLD);
+    }
+    /*for(i=0;i<MAP_SIZE+1;i++){
         mvaddch(0,i,fill|COLOR_PAIR(1));
         mvaddch(i,0,fill|COLOR_PAIR(1));
         mvaddch(i,MAP_SIZE+1, fill|COLOR_PAIR(1));
@@ -200,14 +210,15 @@ void init_map(){
     }
     for (j=0;j<winw-MAP_SIZE;j++)
         mvaddch(MAP_SIZE+1,MAP_SIZE+1+j, fill|COLOR_PAIR(1));
-    //samo stampu
+    //samo stampu*/
+    return;
 }
 
 void display_map(coord * current, coord * prev, int colors[4], char * time, int ee){
     int i, col;
     int color_options[]={BLUE_BLACK,GREEN_BLACK,RED_BLACK,WHITE_BLACK};
     chtype * timech=strtoch(time);
-    add_chstring(4, MAP_SIZE+2,timech,1,0);
+    add_chstring(4, MAP_SIZE+3,timech,YELLOW_BLACK,1);
     free(timech);
     if (prev[0].x==prev[1].x && prev[0].x==0){
         for (i=0;i<4;i++) {
