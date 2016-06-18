@@ -3,14 +3,17 @@
 #include "logic.h"
 #include <stdlib.h>
 #include "mtwist.h"
-#include <windows.h>
+#include <Windows.h>
 #include <math.h>
+#pragma comment(lib, "winmm.lib")
 
 int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
-    int sound = 1;
+    int mode = 1;
+    int sound;
     int hor1, hor2, death, brojac, blank1, blank2, blank3, blank4;
     int *lives, *prev_lives;
     int i;
+    int pause = 0;
     next_m next;
     coord * current, * previous;
     board map=make_map(MAP_SIZE);
@@ -19,10 +22,12 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
 
     lives = calloc(sizeof(int), 4);
     prev_lives = calloc(sizeof(int), 4);
+    PlaySound(TEXT("snake_battle_music.wav"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
+
 
     while (1) {
 
-        if (sound) PlaySound(TEXT("snake_battle_music.wav"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
+
         for (i = 0; i < 4; i++) lives[i] = 0;
         for (i = 0; i < player_count; i++) lives[i] = 1;
         for (i = 0; i < bot_count; i++) lives[i+2] = 1;
@@ -47,31 +52,51 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
                 blank4 = (int) rintl((mt_ldrand() * 9)) + 1;
             }
 
-            next=next_move(map,current, map.moves, lives, prev_lives);
-            if (brojac == blank1){
-                next.next[0].blank = 1;
+            next=next_move(map,current, map.moves, lives, prev_lives, &sound);
+            if (next.delay == -32){
+                //display sa pauzom
+                while (1) {
+                    mode = getch();
+                    if (mode == 32) break;
+                    else if (mode == 'm') {
+                        if (sound) {
+                            sound = toggle(sound);
+                            PlaySound(NULL, NULL, 0);
+                        }
+                        else {
+                            sound = toggle(sound);
+                            PlaySound(TEXT("snake_battle_music.wav"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
+                        }
+                    }
+                    continue;
+                }
             }
-            if (brojac == blank2){
-                next.next[1].blank = 1;
-            }
-            if (brojac == blank3){
-                next.next[2].blank = 1;
-            }
-            if (brojac == blank4){
-                next.next[3].blank = 1;
-            }
-            Sleep((DWORD)next.delay);
-            for (i = 0; i < 4; i++) prev_lives[i] = lives[i];
-            check_death(map,next.next, lives);
+            if (next.delay != -32) {
+                if (brojac == blank1) {
+                    next.next[0].blank = 1;
+                }
+                if (brojac == blank2) {
+                    next.next[1].blank = 1;
+                }
+                if (brojac == blank3) {
+                    next.next[2].blank = 1;
+                }
+                if (brojac == blank4) {
+                    next.next[3].blank = 1;
+                }
+                Sleep((DWORD) next.delay);
+                for (i = 0; i < 4; i++) prev_lives[i] = lives[i];
+                check_death(map, next.next, lives);
 
-            copy_coord(current,previous);
-            copy_coord(next.next,current);
-            map.heads = next.next;
-            display_map(current,previous,colors);
-            update_map(map,next.next);
-            if (game_over(lives)) break;
+                copy_coord(current, previous);
+                copy_coord(next.next, current);
+                map.heads = next.next;
+                display_map(current, previous, colors);
+                update_map(map, next.next);
+                if (game_over(lives)) break;
 
-            //print_board(map);
+                //print_board(map);
+            }
         }
         display_map(current,previous,colors);
         free(previous); free(current);

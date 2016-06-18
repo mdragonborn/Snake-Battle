@@ -33,8 +33,8 @@ typedef struct next_move_with_delay {
     coord* next;
     double delay;
 }next_m;
-
-next_m next_move(board map, coord* current, int moves, int* lives, int* prev_lives);
+int toggle(int a);
+next_m next_move(board map, coord* current, int moves, int* lives, int* prev_lives, int* zvuk);
 coord* initialise(board map, int br_botova, int br_igraca, int moves, int* lives);
 void copy_coord(coord * source, coord * target);
 board reset_board(board map);

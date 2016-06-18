@@ -9,7 +9,12 @@
 #include <math.h>
 #include "mtwist.h"
 #include "ai.h"
+#include <Windows.h>
+#pragma comment(lib, "winmm.lib")
 
+int toggle(int a){
+    return a == 1 ? 0 : 1;
+}
 
 void copy_coord(coord *source, coord *target) {
     int i;
@@ -43,7 +48,8 @@ void error() {
     exit(1);
 }
 
-next_m next_move(board map, coord *current, int moves, int* lives, int* prev_lives) {
+next_m next_move(board map, coord *current, int moves, int* lives, int* prev_lives, int* zvuk) {
+
     next_m vrati;
     int input, hor1, hor2;
     double TIMEOUT;
@@ -65,7 +71,23 @@ next_m next_move(board map, coord *current, int moves, int* lives, int* prev_liv
     if (vrati.delay < 0) vrati.delay = TIMEOUT;
     hor1 = (current[0].dir == 1 || current[0].dir == 3);
     hor2 = (current[1].dir == 1 || current[1].dir == 3);
-    vrati.next = move_player(current, input, hor1, hor2, moves, map, lives, prev_lives);
+    if (input == 'm'){
+        if (*zvuk == 1) {
+            PlaySound(NULL, NULL, 0);
+            *zvuk = toggle(*zvuk);
+        }
+        else if (*zvuk == 0) {
+            *zvuk = toggle(*zvuk);
+            PlaySound(TEXT("snake_battle_music.wav"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
+        }
+        vrati.next = move_player(current, 0, hor1, hor2, moves, map, lives, prev_lives);
+    }
+    else if (input == 32){
+        vrati.delay = -32;
+    }
+    else if (input != 'm'){
+        vrati.next = move_player(current, input, hor1, hor2, moves, map, lives, prev_lives);
+    }
 
     return vrati;
 }
