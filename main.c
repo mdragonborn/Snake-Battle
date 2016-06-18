@@ -59,7 +59,7 @@ int main() {
                 erase();
                 refresh();
                 switch (new_select) {
-                    case 4:
+                    case 5:
                         exit(0);
                     case 0:
                         newgame_menu(logo, colors);
