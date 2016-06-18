@@ -43,14 +43,18 @@ void add_chstring(int top, int left, chtype * string, int color_pair, int bold){
 
 void addsqr(int top, int left, int size, int color_pair, int bold){
     int i, j;
-    if (bold)
+    if (!bold)
     for (i=0;i<size;i++)
-        for(j=0;j<size;j++)
-            mvaddch(top+i,left+i,fill|COLOR_PAIR(color_pair)|A_BOLD);
+        for(j=0;j<size;j++) {
+            mvaddch(top + i, left + j, fill | COLOR_PAIR(color_pair) | A_BOLD);
+            refresh();
+        }
     else
         for (i=0;i<size;i++)
-            for(j=0;j<size;j++)
-                mvaddch(top+i,left+i,fill|COLOR_PAIR(color_pair));
+            for(j=0;j<size;j++) {
+                mvaddch(top + i, left + j, fill | COLOR_PAIR(color_pair));
+                refresh();
+            }
     return;
 }
 
@@ -131,9 +135,7 @@ void add_logo(int top, int left, char logo[23][35]){
     return;
 }
 
-
-void display_main_menu(int old_option, int new_option, option * commands, char logo[23][35], int n_commands)  //n_commands ???
-{
+void display_main_menu(int old_option, int new_option, option * commands, char logo[23][35], int n_commands) { //n_commands ???
     chtype dot[]={'<', ' ' ,'>', ' ',0}, selected[]={'<',ACS_DIAMOND,'>', ' ',0};
     int lmarg = (winw-17)/2,
             tmarg = 35;
@@ -159,14 +161,14 @@ void display_main_menu(int old_option, int new_option, option * commands, char l
 }
 
 void display_color_menu(int old_option, int new_option, int prev_player, int curr_player, char logo[23][35], int avail[4], option * players){
-    int lmarg = 13,
-            tmarg = 28;
+    int lmarg = (winw)/2,
+            tmarg = 40;
     int i, n_commands=4;
 
     if (old_option == -1 || prev_player!=curr_player) {
         clear();
         set_bckgd(2);
-        add_logo(1, 9, logo);
+        add_logo(10, lmarg-10, logo);
         add_chstring(26, 13, players[curr_player].tekst, 0, 1);
         for (i = 0; i < 4; i++)
         {
@@ -292,7 +294,7 @@ int pick_bot_levels(int * bot_count, int bot_level[2], char logo[23][35]){
         erase();
         old_option=-1; new_option=0;
         display_main_menu(old_option, new_option, bot_levels,logo, 3);
-        add_chstring(25, 15,pick,BGD,1); mvaddch(25,19,(i==0)?'1':'2');
+        add_chstring(34, 30,pick,BGD,1); mvaddch(34,34,(i==0)?'1':'2');
         refresh();
         while (bot_level[i] == 0) {
             key = getch();
@@ -515,7 +517,6 @@ void pick_colors(int colors[4], char logo[23][35]){
         }
     }
 }
-
 
 void high_scores(){
 
