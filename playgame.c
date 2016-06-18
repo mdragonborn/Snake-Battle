@@ -10,7 +10,7 @@
 
 int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     int mode = 1;
-    int sound;
+    int sound = 1;
     int hor1, hor2, death, brojac, blank1, blank2, blank3, blank4;
     int *lives, *prev_lives;
     int i;
