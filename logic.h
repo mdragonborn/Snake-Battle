@@ -33,6 +33,7 @@ typedef struct board_with_dimens {
 typedef struct next_move_with_delay {
     coord* next;
     char time[10];
+    int ee;
     double delay;
 }next_m;
 void time_to_str(double x, char* timer);

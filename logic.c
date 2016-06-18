@@ -98,8 +98,9 @@ next_m next_move(board map, coord *current, int moves, int* lives, int* prev_liv
     int input, hor1, hor2;
     double TIMEOUT;
     clock_t target, start, end;
-    vrati.next = calloc(sizeof(coord), 4);
 
+    vrati.next = calloc(sizeof(coord), 4);
+    vrati.ee = 0;
     input = 0;
     if (players_dead(lives))TIMEOUT = (0.01 * CLOCKS_PER_SEC);
     else TIMEOUT = (0.04 * CLOCKS_PER_SEC);
@@ -131,6 +132,20 @@ next_m next_move(board map, coord *current, int moves, int* lives, int* prev_liv
     }
     else if (input == 27){
         vrati.delay = -27;
+    }
+    else if (input == '9'){
+        while (1) {
+            if (_kbhit()) {
+                input = _getch();
+                break;
+            }
+        }
+        if (input == '0'){
+            vrati.ee = 1;
+            PlaySound(TEXT("snake_battle.wav"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
+        }
+
+
     }
     else if (input != 'm'){
         vrati.next = move_player(current, input, hor1, hor2, moves, map, lives, prev_lives);
