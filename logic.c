@@ -137,7 +137,7 @@ next_m next_move(board map, coord *current, int moves, int* lives, int* prev_liv
     if (input != 'm'){
         if (input == '9'){
             vrati.ee = 1;
-            PlaySound(TEXT("snake_battle.wav"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
+            PlaySound(TEXT("snake_battle.bin"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
         }
         vrati.next = move_player(current, input, hor1, hor2, moves, map, lives, prev_lives);
     }
