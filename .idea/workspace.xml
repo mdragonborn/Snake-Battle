@@ -11,9 +11,7 @@
     </ADDITIONAL_GENERATION_ENVIRONMENT>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b10d8dba-8cd2-4450-b646-5f74b0eb655d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/display.c" afterPath="$PROJECT_DIR$/display.c" />
-    </list>
+    <list default="true" id="b10d8dba-8cd2-4450-b646-5f74b0eb655d" name="Default" comment="" />
     <ignored path="demomeni.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
