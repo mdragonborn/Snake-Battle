@@ -200,8 +200,11 @@ void init_map(){
     //samo stampu
 }
 
-void display_map(coord * current, coord * prev, int colors[4]){
+void display_map(coord * current, coord * prev, int colors[4], char * time){
     int i, col;
+    chtype * timech=strtoch(time);
+    add_chstring(4, MAP_SIZE+2,timech,1,0);
+    free(timech);
     if (prev[0].x==prev[1].x && prev[0].x==0){
         for (i=0;i<4;i++) {
             if (current[i].x==-1) continue;

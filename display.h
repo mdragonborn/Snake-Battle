@@ -36,7 +36,7 @@ void add_logo(int top, int left, char logo[23][35]);
 void display_main_menu(int old_option, int new_option, option * commands, char logo[23][35], int n_commands);
 void display_color_menu(int old_option, int new_option, int prev_player, int curr_player, char logo[23][35], int avail[4], option * players);
 void init_map();
-void display_map(coord * current, coord * prev, int colors[4]);
+void display_map(coord * current, coord * prev, int colors[4], char * time);
 void newgame_menu(char logo[23][35], int colors[4]);
 void pick_colors(int colors[4], char logo[23][35]);
 int pick_bot_levels(int * bot_count, int bot_level[2], char logo[23][35]);
