@@ -11,9 +11,10 @@
 #define BGDC 6
 #define BOARD_SIZE 30
 #define WHITE_BLACK 2               //parovi boja
-#define WHITE_GREEN 1
-#define WHITE_RED 4
-#define WHITE_YELLOW 3
+#define GREEN_BLACK 1
+#define RED_BLACK 4
+#define YELLOW_BLACK 3
+#define BLUE_BLACK 5
 #define MAP_SIZE 50
 #define OFFX 0
 #define OFFY 0
@@ -97,6 +98,7 @@ void screen(int h, int w){
         init_pair(BGD, COLOR_WHITE, COLOR_BLACK); //2
         init_pair(3, COLOR_YELLOW, COLOR_BLACK);
         init_pair(4, COLOR_RED, COLOR_BLACK);
+        init_pair(5,COLOR_CYAN,COLOR_BLACK);
     }
     noecho();
     curs_set(0);
@@ -163,6 +165,7 @@ void display_main_menu(int old_option, int new_option, option * commands, char l
 void display_color_menu(int old_option, int new_option, int prev_player, int curr_player, char logo[23][35], int avail[4], option * players){
     int lmarg = (winw)/2,
             tmarg = 40;
+    int color_options[]={BLUE_BLACK,GREEN_BLACK,RED_BLACK,WHITE_BLACK};
     int i, n_commands=4;
 
     if (old_option == -1 || prev_player!=curr_player) {
@@ -172,7 +175,7 @@ void display_color_menu(int old_option, int new_option, int prev_player, int cur
         add_chstring(26, 13, players[curr_player].tekst, 0, 1);
         for (i = 0; i < 4; i++)
         {
-            addsqr(lmarg+(i%2)*5, tmarg+(i>1)?5:0,3,i,avail[i]);
+            addsqr(lmarg+(i%2)*5, tmarg+((i>1)?5:0),3,color_options[i],avail[i]);
         }
         i=0; while (avail[i]) i++;
         updatesqr(tmarg+(i%2)*5-1, lmarg+(i>1)?5:0-1,tmarg+(i%2)*5-1, lmarg+(i>1)?5:0-1);
