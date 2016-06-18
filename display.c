@@ -4,6 +4,8 @@
 #include <string.h>
 #include "logic.h"
 #include "playgame.h"
+#include "mtwist.h"
+#include <math.h>
 
 #define winh 52
 #define winw 80
@@ -201,7 +203,7 @@ void init_map(){
     //samo stampu
 }
 
-void display_map(coord * current, coord * prev, int colors[4], char * time){
+void display_map(coord * current, coord * prev, int colors[4], char * time, int ee){
     int i, col;
     int color_options[]={BLUE_BLACK,GREEN_BLACK,RED_BLACK,WHITE_BLACK};
     chtype * timech=strtoch(time);
@@ -210,23 +212,23 @@ void display_map(coord * current, coord * prev, int colors[4], char * time){
     if (prev[0].x==prev[1].x && prev[0].x==0){
         for (i=0;i<4;i++) {
             if (current[i].x==-1) continue;
-            col=color_options[colors[i]];
+            col=color_options[colors[(ee)?(int)(rintl((mt_ldrand() * 3)) + 1):i]];
             switch (current[i].dir) {
                 case 0:
                     mvaddch(current[i].x + OFFX+1, current[i].y + OFFY, ACS_VLINE | COLOR_PAIR(col) | A_BOLD);
-                    mvaddch(current[i].x + OFFX, current[i].y + OFFY, ACS_DIAMOND | COLOR_PAIR(3) | A_BOLD);
+                    mvaddch(current[i].x + OFFX, current[i].y + OFFY, ACS_DIAMOND | COLOR_PAIR((ee)?(int)(rintl((mt_ldrand() * 5)) + 1):3) | A_BOLD);
                     break;
                 case 1:
                     mvaddch(current[i].x + OFFX, current[i].y + OFFY-1, ACS_HLINE | COLOR_PAIR(col) | A_BOLD);
-                    mvaddch(current[i].x + OFFX, current[i].y + OFFY, ACS_DIAMOND | COLOR_PAIR(3) | A_BOLD);
+                    mvaddch(current[i].x + OFFX, current[i].y + OFFY, ACS_DIAMOND | COLOR_PAIR((ee)?(int)(rintl((mt_ldrand() * 5)) + 1):3) | A_BOLD);
                     break;
                 case 2:
                     mvaddch(current[i].x + OFFX-1, current[i].y + OFFY, ACS_VLINE | COLOR_PAIR(col) | A_BOLD);
-                    mvaddch(current[i].x + OFFX, current[i].y + OFFY, ACS_DIAMOND | COLOR_PAIR(3) | A_BOLD);
+                    mvaddch(current[i].x + OFFX, current[i].y + OFFY, ACS_DIAMOND | COLOR_PAIR((ee)?(int)(rintl((mt_ldrand() * 5)) + 1):3) | A_BOLD);
                     break;
                 case 3:
                     mvaddch(current[i].x + OFFX, current[i].y + OFFY+1, ACS_HLINE | COLOR_PAIR(col) | A_BOLD);
-                    mvaddch(current[i].x + OFFX, current[i].y + OFFY, ACS_DIAMOND | COLOR_PAIR(3) | A_BOLD);
+                    mvaddch(current[i].x + OFFX, current[i].y + OFFY, ACS_DIAMOND | COLOR_PAIR((ee)?(int)(rintl((mt_ldrand() * 5)) + 1):3) | A_BOLD);
                     break;
                 default:
                     break;
@@ -238,7 +240,7 @@ void display_map(coord * current, coord * prev, int colors[4], char * time){
         chtype next;
         for(i=0;i<4;i++){
             if (current[i].x==-1) continue;
-            col=color_options[colors[i]];
+            col=color_options[colors[(ee)?(int)(rintl((mt_ldrand() * 3)) + 1):i]];
             if (prev[i].blank!=1) switch(current[i].dir){
                     case 0:{
                         switch(prev[i].dir){
@@ -280,7 +282,7 @@ void display_map(coord * current, coord * prev, int colors[4], char * time){
                 }
             if (prev[i].blank!=1) mvaddch(prev[i].x+OFFX, prev[i].y+OFFY, next|COLOR_PAIR(col)|A_BOLD);
             else mvaddch(prev[i].x+OFFX, prev[i].y+OFFY, ' '|COLOR_PAIR(col)|A_BOLD);
-            mvaddch(current[i].x+OFFX,current[i].y+OFFX,ACS_DIAMOND|COLOR_PAIR(3)|A_BOLD);
+            mvaddch(current[i].x+OFFX,current[i].y+OFFX,ACS_DIAMOND|COLOR_PAIR((ee)?(int)(rintl((mt_ldrand() * 5)) + 1):3)|A_BOLD);
 
 
         }
