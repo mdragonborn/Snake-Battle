@@ -76,7 +76,6 @@ void copy_coord(coord *source, coord *target) {
         target[i].y = source[i].y;
         target[i].dir = source[i].dir;
         target[i].blank = source[i].blank;
-        strcpy(target[i].name, source[i].name);
         target[i].score = source[i].score;
     }
     return;
@@ -230,7 +229,6 @@ coord zero_case(coord current) {
     new.x = current.x;
     new.y = current.y;
     new.dir = current.dir;
-    strcpy(new.name, current.name);
     new.score = current.score;
 
     switch (current.dir) {
@@ -453,7 +451,7 @@ void update_map(board map, coord *current) {
 coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives, int first, int* scores) {
     coord *new, *new1;
     int i;
-    char* names[] = {"Fred", "Greenlee", "Greydon", "Bluebell"};
+
     new = malloc(sizeof(coord) * 4);
     new1 = malloc(sizeof(coord)* 4);
     new[0].x = (int) rintl((mt_ldrand() * (map.n - 1))) + 1;
@@ -522,13 +520,11 @@ coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives
     if (first == 1) {
         for (i = 0; i < 4; i++) {
             new[i].score = 0;
-            strcpy(new[i].name, names[i]);
         }
     }
     else {
         for (i = 0; i < 4; i++){
             new[i].score = scores[i];
-            strcpy(new[i].name, names[i]);
         }
     }
 

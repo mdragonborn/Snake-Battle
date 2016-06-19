@@ -8,7 +8,7 @@
 #include "timers.h"
 #pragma comment(lib, "winmm.lib")
 
-int was_modified(char* path){
+/*int was_modified(char* path){
     FILE* high;
     int result;
     int last = 0;
@@ -124,7 +124,7 @@ void write_high(char* path, coord current[4]){
         }
     }
 
-}
+}*/
 
 int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     int mode = 1;
