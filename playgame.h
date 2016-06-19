@@ -7,8 +7,8 @@
 
 int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]);
 int was_modified(char* path);
-void write_high(char *path, coord current[4]);
-int read_score(FILE* high);
-void read_name(FILE* high, char* name);
+void sort_players(player players[11]);
 void write_xor(char* path);
+void create_new_bin(char* path);
+void write_one_high(char* path, coord current, char* player_name);
 #endif //DEMOMENI_PLAYGAME_H

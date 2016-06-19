@@ -32,6 +32,11 @@ typedef struct board_with_dimens {
     coord* heads;
 }board;
 
+typedef struct sPlayer {
+    char name[10];
+    int score;
+}player;
+
 typedef struct next_move_with_delay {
     coord* next;
     char time[10];

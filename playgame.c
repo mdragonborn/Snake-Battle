@@ -41,36 +41,6 @@ void write_xor(char* path){
     fputc(result, high);
     fclose(high);
 }
-void read_name(FILE* high, char* name){
-
-    int i = 0;
-    int c;
-    while ((c = fgetc(high)) != '|' ) {
-        if (feof(high)) break;
-        if (c == '\n') break;
-        name[i++] = (char) c;
-    }
-    name[i] = '\0';
-}
-
-
-int read_score(FILE* high){
-    char br[4];
-    int score;
-    int c;
-    int i = 0;
-
-    while ((c = fgetc(high)) != '\n'){
-        if (feof(high)){
-            break;
-        }
-        br[i++] = (char) c;
-    }
-    br[i] = '\0';
-    if (i == 0) return -1;
-    score = atoi(br);
-    return score;
-}
 
 void sort_players(player players[11]){
     int i, j;
@@ -86,7 +56,19 @@ void sort_players(player players[11]){
         }
     }
 }
+void create_new_bin(char* path){
+    FILE* init;
+    int i;
+    player temp;
 
+    init = fopen(path, "wb");
+    for (i = 0; i < 10; i++){
+        strcpy(temp.name, "---");
+        temp.score = 0;
+        fwrite(&temp, sizeof(player), 1, init);
+    }
+    fclose(init);
+}
 void write_one_high(char* path, coord current, char* player_name){
     int i;
     int position = 0;
@@ -102,22 +84,20 @@ void write_one_high(char* path, coord current, char* player_name){
     if (!high){
         exit(420);
     }
-    fseek(high, 0, SEEK_END);
-    end = ftell(high);
-    fseek(high, 0, SEEK_SET);
-    i = 0;
-    while (position != end) {
-        fread(&players[i++], sizeof(player), 1, high);
-        position += sizeof(player);
+    //popuni ako je prazno
+    for (i = 0; i < 10; i++) {
+        fread(&players[i], sizeof(player), 1, high);
     }
     players[10].score =  current.score;
     strcpy(players[10].name, name);
     sort_players(players);
     fclose(high);
     high = fopen(path, "wb");
+
     for (i = 0; i < 10; i++){
         fwrite(&players[i], sizeof(player), 1, high);
     }
+
     fclose(high);
 
 }
@@ -259,8 +239,9 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
             stop_timer(&t);
 
         }
-
         //write_high("C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\high_scores.txt", next.next);
+        write_one_high("C:\\Users\\bulse_eye\\Documents\\Snake-Battle\\high_scores.bin", current[0], "MISKO");
+        write_one_high("C:\\Users\\bulse_eye\\Documents\\Snake-Battle\\high_scores.bin", current[1], "DUSKO");
         display_map(current,previous,colors, map.timer, next.ee);
         free(previous); free(current);
         Sleep(1000);
