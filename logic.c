@@ -308,12 +308,19 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
         }
     }
 
-    hard_botovi = hardbot(map, current, kopija);
+    //hard_botovi = hardbot(map, current, kopija);
 
-    if (lives[2] != 0) new_coord[2] = (current[2].bot_level == 0) ? mediumbot(current[2].x, current[2].y, current[2].dir, map.brd ) : hard_botovi[0];
+    for (i = 0; i < map.n+2; i++){
+        free(kopija[i]);
+    }
+    free(kopija);
+
+    if (lives[2] != 0) {
+        new_coord[2] =  mediumbot(current[2].x, current[2].y, current[2].dir, map.brd );// : hard_botovi[0];
+    }
     else new_coord[2] = current[2];
 
-    if (lives[3] != 0) new_coord[3] = (current[3].bot_level == 0) ? mediumbot(current[3].x, current[3].y, current[3].dir, map.brd ) : hard_botovi[1];
+    if (lives[3] != 0) new_coord[3] =  mediumbot(current[3].x, current[3].y, current[3].dir, map.brd );// : hard_botovi[1];
     else new_coord[3] = current[3];
     if (input == 224 && current[1].x != -1) {
         input = _getch();

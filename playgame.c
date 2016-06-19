@@ -70,15 +70,13 @@ int read_score(FILE* high){
     return score;
 }
 
-void write_one_high(char* path, coord current){
-    FILE* high, *backup;
+void write_one_high(FILE* high, coord current, FILE* backup char* player_name){
     int i;
     int cur_score;
     char name[11];
     char buffer[15];
     int printed;
-    backup = fopen("C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\backup.txt", "w");
-    high = fopen(path, "r");
+
     if (!high || !backup){
         exit(420);
     }
@@ -90,28 +88,22 @@ void write_one_high(char* path, coord current){
             fprintf(backup, "%s %d\n", name, cur_score);
         }
         else {
-            fprintf(backup, "%s %d\n", current.name, current.score);
+            fprintf(backup, "%s %d\n", player_name, current.score);
             printed = 1;
             break;
         }
     }
     if (!printed){
-        fprintf(backup, "%s %d\n", current.name, current.score);
+        fprintf(backup, "%s %d\n", player_name, current.score);
     }
     while (!feof(high)) {
         fscanf(high, "%s %d\n", name, &cur_score);
         fprintf(backup, "%s %d\n", name, cur_score);
     }
-
-    fclose(high);
-    fclose(backup);
-    remove(path);
-    rename("C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\backup.txt", "C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\high_scores.txt");
-
-
 }
-void write_high(char* path, coord current[4]){
-    FILE* high, *backup;
+
+void write_high(FILE* high, coord current[4]){
+    FILE* backup;
     int i;
     int cur_score;
     char name[11];
@@ -226,15 +218,24 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
                 if (brojac == blank1) {
                     next.next[0].blank = 1;
                 }
+
+                else next.next[0].blank = 0;
+
                 if (brojac == blank2) {
                     next.next[1].blank = 1;
                 }
+                else next.next[1].blank = 0;
+
                 if (brojac == blank3) {
                     next.next[2].blank = 1;
                 }
+                else next.next[2].blank = 0;
+
                 if (brojac == blank4) {
                     next.next[3].blank = 1;
                 }
+                else next.next[3].blank = 0;
+
                 Sleep((DWORD) next.delay);
                 for (i = 0; i < 4; i++) prev_lives[i] = lives[i];
                 check_death(map, next.next, lives);
@@ -257,7 +258,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
         }
 
         //write_high("C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\high_scores.txt", next.next);
-        //display_map(current,previous,colors, map.timer, next.ee);
+        display_map(current,previous,colors, map.timer, next.ee);
         free(previous); free(current);
         Sleep(1000);
         if (!play) break;
