@@ -22,6 +22,10 @@
 #define OFFY 0
 #define fill 65584
 
+typedef struct sPlayer {
+    char name[10];
+    int score;
+}player;
 
 typedef struct option{
     chtype * tekst;
@@ -609,8 +613,23 @@ void pick_colors(int colors[4], char logo[23][35]){
     return;
 }
 
-void high_scores(){
-
+void high_scores(char * path){
+    FILE * dat=fopen(path,"rb"); int i;
+    player * temp; chtype * buffer;
+    clear();
+    for (i=0;i<10;i++) {
+        temp=calloc(sizeof(player),1);
+        fread(temp, sizeof(temp), 1, dat);
+        buffer=strtoch(temp->name);
+        add_chstring(10+i,10,buffer,2,1);
+        free(buffer);
+        buffer=numtoch(temp->score);
+        add_chstring(10+i, 21, buffer, 2, 1);
+        free(buffer);
+        free(temp);
+    }
+    i=getch();
+    return;
 }
 
 void display_about(char logo[23][35]){

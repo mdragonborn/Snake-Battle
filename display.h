@@ -20,6 +20,7 @@
 #define OFFX 0
 #define OFFY 0
 #define fill 65584
+
 typedef struct sPlayer {
     char name[10];
     int score;
