@@ -8,6 +8,94 @@
 #include "timers.h"
 #pragma comment(lib, "winmm.lib")
 
+int was_modified(char* path){
+    FILE* high;
+    int result;
+    int last = 0;
+
+    high = fopen(path, "r");
+    result = fgetc(high);
+    while (!feof(high)){
+        last = fgetc(high);
+        result ^= last;
+    }
+    result ^= last;
+    fclose(high);
+    if (last != result) return 1;
+    return 0;
+}
+
+void write_xor(char* path){
+    FILE* high;
+    int result;
+
+    high = fopen(path, "r");
+    result = fgetc(high);
+    while (!feof(high)) {
+        result ^= fgetc(high);
+    }
+    fclose(high);
+    high = fopen(path, "a");
+    fputc(result, high);
+    fclose(high);
+}
+void read_name(FILE* high, char* name){
+
+    int i = 0;
+    int c;
+    while (((c = fgetc(high)) != '|' ) && !feof(high)) {
+        name[i++] = (char) c;
+    }
+    name[i] = '\0';
+}
+
+
+int read_score(FILE* high){
+    char br[4];
+    int score;
+    int c;
+    int i = 0;
+
+    while (((c = fgetc(high)) != '\n') && !feof(high)){
+        br[i++] = (char) c;
+    }
+    br[i] = '\0';
+    if (feof(high)) return 0;
+    score = atoi(br);
+    return score;
+}
+
+void write_high(char* path, coord current[4]){
+    FILE* high;
+    int i;
+    int cur_score = 10000;
+    int cur_position;
+    char name[11];
+    char score[3];
+
+    high = fopen(path, "r+");
+    for (i = 0; i < 2; i++) {
+        cur_score = 1000;
+        fseek(high, 0, SEEK_SET);
+        cur_position = ftell(high);
+        while (current[i].score < cur_score) {
+            cur_position = ftell(high);
+            read_name(high, name);
+            cur_score = read_score(high);
+        }
+        if (!feof(high)) fseek(high, cur_position, SEEK_SET);
+        fputs(current[i].name, high);
+        fputc('|', high);
+        itoa(current[i].score, score, 10);
+        fputs(score, high);
+        fputc('\n', high);
+
+
+    }
+    fclose(high);
+
+}
+
 int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     int mode = 1;
     int sound = 1;
@@ -17,6 +105,8 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     int pause = 0;
     double current_time = 0;
     int prva = 1;
+    int first;
+    int scores[4] = {0, 0, 0, 0};
     next_m next;
     coord * current, * previous;
     board map=make_map(MAP_SIZE);
@@ -28,6 +118,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     PlaySound(TEXT("snake_battle_music.wav"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
 
     current_time = 0;
+    first = 1;
     while (1) {
 
         prva = 1;
@@ -38,11 +129,13 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
         blank1 = blank2 = blank3 = blank4 = 0;
         brojac = 0;
         map = reset_board(map);
-        current = initialise(map, bot_count, player_count, map.moves, lives);
+        current = initialise(map, bot_count, player_count, map.moves, lives, first, scores);
+        first = 0;
         map.heads = current;
         init_map();
         previous=(coord*)calloc(sizeof(coord),4);
         display_map(current,previous,colors, map.timer, 0);
+
         Sleep(1000);
 
         while(1){
@@ -119,6 +212,9 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
                 map.heads = next.next;
                 display_map(current, previous, colors, map.timer, next.ee);
                 update_map(map, next.next);
+                for (i = 0; i < 4; i++){
+                    scores[i] = next.next[i].score;
+                }
                 if (game_over(lives)) break;
 
                 //print_board(map);
@@ -126,6 +222,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
             prva = 0;
             stop_timer(&t);
         }
+        write_high("C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\high_score.txt", next.next);
         display_map(current,previous,colors, map.timer, next.ee);
         free(previous); free(current);
         Sleep(1000);
