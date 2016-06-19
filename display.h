@@ -20,14 +20,7 @@
 #define OFFX 0
 #define OFFY 0
 #define fill 65584
-<<<<<<< HEAD
-=======
 
-typedef struct sPlayer {
-    char name[10];
-    int score;
-}player;
->>>>>>> origin/master
 
 typedef struct option{
     chtype * tekst;
@@ -35,7 +28,7 @@ typedef struct option{
 
 chtype  * strtoch(char * string);
 void add_chstring(int top, int left, chtype * string, int color_pair, int bold);
-int screen(int h, int w);
+void screen(int h, int w);
 void set_bckgd(int bckgd);
 void addsqr(int top, int left, int size, int color_pair, int bold);
 void updatesqr(int top_old, int left_old, int top_new, int left_new);

@@ -6,6 +6,7 @@
 #include "playgame.h"
 #include "mtwist.h"
 #include <math.h>
+#include "display.h"
 
 #define winh 52
 #define winw 80
@@ -21,15 +22,6 @@
 #define OFFX 0
 #define OFFY 0
 #define fill 65584
-
-typedef struct sPlayer {
-    char name[10];
-    int score;
-}player;
-
-typedef struct option{
-    chtype * tekst;
-} option;
 
 chtype  * strtoch(char * string){
     int len=strlen(string), i;
