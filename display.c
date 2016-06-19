@@ -607,20 +607,19 @@ void pick_colors(int colors[4], char logo[23][35]){
 
 void high_scores(char * path){
     FILE * dat=fopen(path,"rb"); int i;
-    player * temp; chtype * buffer;
+    player temp; chtype * buffer;
     clear();
     for (i=0;i<10;i++) {
-        temp=calloc(sizeof(player),1);
-        fread(temp, sizeof(temp), 1, dat);
-        buffer=strtoch(temp->name);
+        fread(&temp, sizeof(player), 1, dat);
+        buffer=strtoch(temp.name);
         add_chstring(10+i,10,buffer,2,1);
         free(buffer);
-        buffer=numtoch(temp->score);
+        buffer=numtoch(temp.score);
         add_chstring(10+i, 21, buffer, 2, 1);
         free(buffer);
-        free(temp);
     }
     i=getch();
+    fclose(dat);
     return;
 }
 
@@ -655,3 +654,45 @@ void display_about(char logo[23][35]){
     slider=getch();
     return;
 }
+
+char * name_input(int lmarg, int tmarg, int maxlen){
+    char * string=(char*)calloc(sizeof(char),(unsigned)maxlen+1);
+    int i, key;
+    while(1){
+
+    }
+}
+
+/*void pitajzaime(char *ime) {
+    char brojac, i, j;
+    char c;
+    resize_term(5, 30);
+    printw("\n          Unesi ime:\n\n     "); //10 spejsova gore, 5 dole
+    brojac = 0;
+    attron(COLOR_PAIR(MENITEKST));
+    curs_set(2);
+    while (1) {
+        c = getch();
+        if (c == BACKSPACE) {
+            if (brojac > 0) {
+                brojac--;
+                mvaddch(i, --j, ' ');
+                move(i, j);
+            }
+        }
+        else if (c == '\n' || brojac == MAXSTR - 1) {
+            ime[brojac] = '\0';
+            resize_term(25, 50);
+            clear();
+            curs_set(0);
+            return;
+        }
+            //moram ovako jer kad sam stavio isprint() iz headera ctype pucalo je kad unesem numericki minus
+        else if (c >= 'a'&&c <= 'z' || c >= 'A'&&c <= 'Z' || c >= '0'&&c <= '9' || c == ' ' || c == '.' || c == '#' || c == '_') {
+            ime[brojac++] = c;
+            mvaddch(i, j++, c); //da bi se videlo sta se upisuje
+        }
+        refresh();
+    }
+}
+*/
