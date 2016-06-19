@@ -233,7 +233,7 @@ void update_score(chtype names[4][10], int color[],coord * current, int color_pa
     while(allPrinted){
         max=-1;
         for(j=0;j<4;j++){
-            if (allPrinted==4 && current[j].x==-1) {
+            if ((allPrinted==4 || allPrinted==3) && current[j].x==-1) {
                 stampano[j]=1;
                 allPrinted--;
             }
