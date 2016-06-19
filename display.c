@@ -352,7 +352,7 @@ int pick_bot_levels(int * bot_count, int bot_level[2], char logo[23][35]){
         erase();
         old_option=-1; new_option=0;
         display_main_menu(old_option, new_option, bot_levels,logo, 3);
-        add_chstring(34, 30,pick,BGD,1); mvaddch(34,34,(i==0)?'1':'2');
+        add_chstring(34, 33,pick,BGD,1); mvaddch(34,37,(i==0)?'1':'2');
         refresh();
         while (bot_level[i] == 0) {
             key = getch();
