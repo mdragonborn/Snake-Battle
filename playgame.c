@@ -70,39 +70,39 @@ int read_score(FILE* high){
     return score;
 }
 
-void write_one_high(char* path, int score){
+void write_one_high(char* path, coord current){
     FILE* high, *backup;
     int i;
     int cur_score;
     char name[11];
-    char buffer[15]
+    char buffer[15];
     int printed;
     backup = fopen("C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\backup.txt", "w");
     high = fopen(path, "r");
     if (!high || !backup){
         exit(420);
     }
+    printed = 0;
     while (!feof(high)){
         fscanf(high, "%s %d\n", name, &cur_score);
         printed = 0;
-        if (score < cur_score) {
+        if (current.score < cur_score) {
             fprintf(backup, "%s %d\n", name, cur_score);
         }
         else {
-            fprintf(backup, "%s %d\n", current[i].name, current[i].score);
+            fprintf(backup, "%s %d\n", current.name, current.score);
             printed = 1;
             break;
         }
     }
-        if (!printed) {
-            fprintf(backup, "%s %d\n", current[i].name, current[i].score);
-        }
-        while (!feof(high)) {
-            fscanf(high, "%s %d\n", name, &cur_score);
-            fprintf(backup, "%s %d\n", name, cur_score);
-        }
-
+    if (!printed){
+        fprintf(backup, "%s %d\n", current.name, current.score);
     }
+    while (!feof(high)) {
+        fscanf(high, "%s %d\n", name, &cur_score);
+        fprintf(backup, "%s %d\n", name, cur_score);
+    }
+
     fclose(high);
     fclose(backup);
     remove(path);
@@ -116,48 +116,13 @@ void write_high(char* path, coord current[4]){
     int cur_score;
     char name[11];
     int printed;
-    backup = fopen("C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\backup.txt", "w");
-    high = fopen(path, "r");
-    if (!high || !backup){
-        exit(420);
-    }
+
     for (i = 0; i < 2; i++) {
         if (current[i].x == -1) continue;
-        if (i == 1 && current[i].x != -1){
-            fclose(high);
-            fclose(backup);
-            remove(path);
-            rename("C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\backup.txt", "C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\high_scores.txt");
-            backup = fopen("C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\backup.txt", "w");
-            high = fopen(path, "r");
-
+        if (i == 1 && current[i].x != -1) {
+            write_one_high(path, current[i]);
         }
-        fseek(high, 0, SEEK_SET);
-        printed = 0;
-        while (!feof(high)) {
-            fscanf(high, "%s %d\n", name, &cur_score);
-            if (current[i].score < cur_score) {
-                fprintf(backup, "%s %d\n", name, cur_score);
-            }
-            else {
-                fprintf(backup, "%s %d\n", current[i].name, current[i].score);
-                printed = 1;
-                break;
-            }
-        }
-        if (!printed) {
-            fprintf(backup, "%s %d\n", current[i].name, current[i].score);
-        }
-        while (!feof(high)) {
-            fscanf(high, "%s %d\n", name, &cur_score);
-            fprintf(backup, "%s %d\n", name, cur_score);
-        }
-
     }
-    fclose(high);
-    fclose(backup);
-    remove(path);
-    rename("C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\backup.txt", "C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\high_scores.txt");
 
 }
 
