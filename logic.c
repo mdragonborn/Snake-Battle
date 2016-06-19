@@ -14,11 +14,12 @@
 
 int did_death_occur(int* lives, int* prev){
     int i;
+    int deaths = 0;
 
     for (i = 0; i < 4; i++){
-        if (lives[i] != prev[i]) return 1;
+        if (lives[i] != prev[i]) deaths++;
     }
-    return 0;
+    return deaths;
 }
 
 int time_to_str(double x, char* timer){
@@ -281,7 +282,7 @@ int* did_just_die(int* prev_lives, int* lives){
 
 }
 coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, board map, int* lives, int* prev_lives) {
-
+    int points;
     coord *new_coord;
     coord *backup;
     int *overwrite;
@@ -308,7 +309,12 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
         }
     }
 
-    //hard_botovi = hardbot(map, current, kopija);
+    for (i = 2; i < 4; i++){
+        if (current[i].bot_level == 2){
+            hard_botovi = hardbot(map, current, kopija);
+            break;
+        }
+    }
 
     for (i = 0; i < map.n+2; i++){
         free(kopija[i]);
@@ -316,15 +322,15 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
     free(kopija);
 
     if (lives[2] != 0) {
-        new_coord[2] =  mediumbot(current[2].x, current[2].y, current[2].dir, map.brd );// : hard_botovi[0];
+        new_coord[2] = (current[2].bot_level == 1) ? mediumbot(current[2].x, current[2].y, current[2].dir, map.brd ) : hard_botovi[0];
         new_coord[2].score = current[2].score;
     }
     else new_coord[2] = current[2];
 
     if (lives[3] != 0) {
-        new_coord[3] =  mediumbot(current[3].x, current[3].y, current[3].dir, map.brd );
+        new_coord[3] = (current[3].bot_level == 1) ? mediumbot(current[3].x, current[3].y, current[3].dir, map.brd ) : hard_botovi[1];
         new_coord[3].score = current[3].score;
-    }// : hard_botovi[1];
+    }
     else new_coord[3] = current[3];
     if (input == 224 && current[1].x != -1) {
         input = _getch();
@@ -430,9 +436,9 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
     check_death(map, new_coord, lives);
     overwrite = did_just_die(prev_lives, lives);
 
-    if (did_death_occur(lives, prev_lives)) {
+    if (points = did_death_occur(lives, prev_lives)) {
         for (i = 0; i < 4; i++){
-            if (lives[i]) new_coord[i].score = current[i].score + 1;
+            if (lives[i]) new_coord[i].score = current[i].score + points;
         }
     }
     wall = is_in_wall(new_coord, map);
