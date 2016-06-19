@@ -21,15 +21,6 @@ int did_death_occur(int* lives, int* prev){
     return 0;
 }
 
-void update_score(coord current[4], int* lives){
-    int i;
-
-    for (i = 0; i < 4; i++){
-        if (lives[i]) current[i].score += 1;
-    }
-
-}
-
 void time_to_str(double x, char* timer){
     int pom;
     char pom2[4];
@@ -85,6 +76,8 @@ void copy_coord(coord *source, coord *target) {
         target[i].y = source[i].y;
         target[i].dir = source[i].dir;
         target[i].blank = source[i].blank;
+        strcpy(target[i].name, source[i].name);
+        target[i].score = source[i].score;
     }
     return;
 }
@@ -233,9 +226,13 @@ void print_board(board map) {
 
 coord zero_case(coord current) {
     coord new;
+
     new.x = current.x;
     new.y = current.y;
     new.dir = current.dir;
+    strcpy(new.name, current.name);
+    new.score = current.score;
+
     switch (current.dir) {
         case 0: {
             new.x = current.x - 1;
@@ -418,7 +415,9 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
     check_death(map, new_coord, lives);
     overwrite = did_just_die(prev_lives, lives);
     if (did_death_occur(lives, prev_lives)) {
-        update_score(new_coord, lives);
+        for (i = 0; i < 4; i++){
+            if (lives[i]) new_coord[i].score = current[i].score + 1;
+        }
     }
     wall = is_in_wall(new_coord, map);
     for (i = 0; i < 4; i++){
@@ -451,11 +450,12 @@ void update_map(board map, coord *current) {
 
 }
 
-coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives) {
-    coord *new;
+coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives, int first, int* scores) {
+    coord *new, *new1;
     int i;
     char* names[] = {"Fred", "Greenlee", "Greydon", "Bluebell"};
     new = malloc(sizeof(coord) * 4);
+    new1 = malloc(sizeof(coord)* 4);
     new[0].x = (int) rintl((mt_ldrand() * (map.n - 1))) + 1;
     new[0].y = (int) rintl((mt_ldrand() * (map.n - 1))) + 1;
     new[0].dir = (int) rintl((mt_ldrand() * 3));
@@ -519,17 +519,26 @@ coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives
         new[3-i].y = -1;
         new[3-i].dir = -1;
     }
-    for (i = 0; i < 4; i++){
-        new[i].score = 0;
-        strcpy(new[i].name, names[i]);
+    if (first == 1) {
+        for (i = 0; i < 4; i++) {
+            new[i].score = 0;
+            strcpy(new[i].name, names[i]);
+        }
+    }
+    else {
+        for (i = 0; i < 4; i++){
+            new[i].score = scores[i];
+            strcpy(new[i].name, names[i]);
+        }
     }
 
     update_map(map, new);
-    new = move_player(new, 0, 0, 0, moves, map, lives, lives);
-    update_map(map, new);
+    new1 = move_player(new, 0, 0, 0, moves, map, lives, lives);
+    update_map(map, new1);
+    free(new);
 
 
-    return new;
+    return new1;
 }
 
 int players_dead(int* lives){
