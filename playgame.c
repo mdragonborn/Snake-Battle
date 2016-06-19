@@ -192,11 +192,12 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
             if (next.delay == -32){
                 current_time += stop_timer(&t);
                 time_to_str(current_time, map.timer);
-                //display sa pauzom
+                toggle_pause(1);
                 while (1) {
                     mode = getch();
                     if (mode == 32) {
                         start_timer(&t);
+                        toggle_pause(0);
                         break;
                     }
                     else if (mode == 'm') {
