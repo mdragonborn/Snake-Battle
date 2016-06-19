@@ -7,6 +7,7 @@
 #include <math.h>
 #include "timers.h"
 #pragma comment(lib, "winmm.lib")
+
 int was_modified(char* path){
     FILE* high;
     int result;

@@ -107,6 +107,7 @@ coord mediumbot(int x, int y, int dir, int **brd){       //pozivam za oba bota p
         case 1:{out.x=x; out.y=y+1;break;}
         case 2:{out.x=x+1; out.y=y; break;}
         case 3:{out.x=x; out.y=y-1; break;}
+        default: break;
     }
 
     return out;
