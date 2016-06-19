@@ -655,11 +655,25 @@ void display_about(char logo[23][35]){
     return;
 }
 
-char * name_input(int lmarg, int tmarg, int maxlen){
+char * name_input(int lmarg, int tmarg, int maxlen, int color){
     char * string=(char*)calloc(sizeof(char),(unsigned)maxlen+1);
-    int i, key;
+    chtype * printbuffer=(chtype*)calloc(sizeof(chtype),(unsigned)maxlen+1);
+    int i=0, key;
     while(1){
-
+        mvaddch(tmarg,lmarg+i,ACS_BOARD|COLOR_PAIR(color));
+        key=getch();
+        if(key==KEY_ENTER)
+            return string;
+        if(key>=32 && key<=126 && i<10) {
+            string[i++] = (char) key;
+            printbuffer[i++]=(chtype) key;
+        }
+        if(key==KEY_BACKSPACE) {
+            string[i--] = 0;
+            printbuffer[i++]=0;
+        }
+        for (key=0;key<maxlen;key++) mvaddch(tmarg,lmarg,' '|COLOR_PAIR(BGD));
+        add_chstring(tmarg,lmarg,printbuffer,color,1);
     }
 }
 
