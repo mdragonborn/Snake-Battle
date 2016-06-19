@@ -21,11 +21,13 @@ int did_death_occur(int* lives, int* prev){
     return 0;
 }
 
-void time_to_str(double x, char* timer){
+int time_to_str(double x, char* timer){
     int pom;
     char pom2[4];
-
-    pom = (((int)x) / 60000);
+    double target = 30*1000; //120000;
+    target -= x;
+    if (target <= 0) return 0;
+    pom = (((int)target) / 60000);
     itoa(pom, pom2, 10);
     timer[2] = ':';
     timer[3] = '\0';
@@ -38,7 +40,7 @@ void time_to_str(double x, char* timer){
         strcat(timer, pom2);
     }
 
-    pom = (((int)x % 60000) / 1000);
+    pom = (((int)target % 60000) / 1000);
     itoa(pom, pom2, 10);
     timer[5] = ':';
     timer[6] = '\0';
@@ -52,7 +54,7 @@ void time_to_str(double x, char* timer){
         timer[4] = pom2[1];
     }
 
-    pom = ((int)x % 1000) / 10;
+    pom = ((int)target % 1000) / 10;
     itoa(pom, pom2, 10);
     if (pom < 10){
         timer[6] = '0';
@@ -63,6 +65,7 @@ void time_to_str(double x, char* timer){
         strcat(timer, pom2);
     }
     timer[8] = '\0';
+    return 1;
 }
 
 int toggle(int a){
@@ -442,7 +445,7 @@ void update_map(board map, coord *current) {
     int i;
 
     for (i = 0; i < 4; i++) {
-        if (current[i].blank != 1 && current[i].x != -1) map.brd[current[i].x][current[i].y] = i + 1;
+        if (current[i].blank != 1 && current[i].x != -1) map.brd[current[i].x][current[i].y] = i + 5;
     }
 
 

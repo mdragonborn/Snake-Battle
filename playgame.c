@@ -143,6 +143,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
 
     Timer t;
     int pom_timer;
+    int play = 1;
     lives = calloc(sizeof(int), 4);
     prev_lives = calloc(sizeof(int), 4);
     PlaySound(TEXT("snake_battle_music.wav"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
@@ -170,7 +171,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
 
         while(1){
             if (!prva) current_time += stop_timer(&t);
-            time_to_str(current_time, map.timer);
+            play = time_to_str(current_time, map.timer);
             start_timer(&t);
             brojac = brojac % 10 + 1;
             map.moves++;
@@ -251,11 +252,16 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
             }
             prva = 0;
             stop_timer(&t);
+
         }
+
         //write_high("C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\high_scores.txt", next.next);
-        display_map(current,previous,colors, map.timer, next.ee);
+        //display_map(current,previous,colors, map.timer, next.ee);
         free(previous); free(current);
         Sleep(1000);
+        if (!play) break;
+
+
     }
 
 }

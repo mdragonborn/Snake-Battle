@@ -37,7 +37,7 @@ typedef struct next_move_with_delay {
     int ee;
     double delay;
 }next_m;
-void time_to_str(double x, char* timer);
+int time_to_str(double x, char* timer);
 int toggle(int a);
 next_m next_move(board map, coord* current, int moves, int* lives, int* prev_lives, int* zvuk, int E);
 coord* initialise(board map, int br_botova, int br_igraca, int moves, int* lives, int first, int* scores);
