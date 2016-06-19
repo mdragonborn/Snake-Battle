@@ -1,2 +1,0 @@
-Fred|3
-Greenlee|2
