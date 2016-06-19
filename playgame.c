@@ -6,9 +6,11 @@
 #include <Windows.h>
 #include <math.h>
 #include "timers.h"
+#include "playgame.h"
+
 #pragma comment(lib, "winmm.lib")
 
-/*int was_modified(char* path){
+int was_modified(char* path){
     FILE* high;
     int result;
     int last = 0;
@@ -70,54 +72,56 @@ int read_score(FILE* high){
     return score;
 }
 
-void write_one_high(FILE* high, coord current, FILE* backup char* player_name){
+void sort_players(player players[11]){
+    int i, j;
+    player t;
+
+    for (i = 0; i < 10; i++){
+        for (j = i+1; j < 11; j++){
+            if (players[i].score < players[j].score) {
+                t = players[i];
+                players[i] = players[j];
+                players[j] = t;
+            }
+        }
+    }
+}
+
+void write_one_high(char* path, coord current, char* player_name){
     int i;
+    int position = 0;
+    int end;
     int cur_score;
+    player players[11];
     char name[11];
     char buffer[15];
     int printed;
+    FILE* high;
 
-    if (!high || !backup){
+    high = fopen(path, "rb");
+    if (!high){
         exit(420);
     }
-    printed = 0;
-    while (!feof(high)){
-        fscanf(high, "%s %d\n", name, &cur_score);
-        printed = 0;
-        if (current.score < cur_score) {
-            fprintf(backup, "%s %d\n", name, cur_score);
-        }
-        else {
-            fprintf(backup, "%s %d\n", player_name, current.score);
-            printed = 1;
-            break;
-        }
+    fseek(high, 0, SEEK_END);
+    end = ftell(high);
+    fseek(high, 0, SEEK_SET);
+    i = 0;
+    while (position != end) {
+        fread(&players[i++], sizeof(player), 1, high);
+        position += sizeof(player);
     }
-    if (!printed){
-        fprintf(backup, "%s %d\n", player_name, current.score);
+    players[10].score =  current.score;
+    strcpy(players[10].name, name);
+    sort_players(players);
+    fclose(high);
+    high = fopen(path, "wb");
+    for (i = 0; i < 10; i++){
+        fwrite(&players[i], sizeof(player), 1, high);
     }
-    while (!feof(high)) {
-        fscanf(high, "%s %d\n", name, &cur_score);
-        fprintf(backup, "%s %d\n", name, cur_score);
-    }
-}
-
-void write_high(FILE* high, coord current[4]){
-    FILE* backup;
-    int i;
-    int cur_score;
-    char name[11];
-    int printed;
-
-    for (i = 0; i < 2; i++) {
-        if (current[i].x == -1) continue;
-        if (i == 1 && current[i].x != -1) {
-            write_one_high(path, current[i]);
-        }
-    }
+    fclose(high);
 
 }
-*/
+
 int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     int mode = 1;
     int sound = 1;
