@@ -8,17 +8,30 @@
 #include "timers.h"
 #include "playgame.h"
 
-#pragma comment(lib, "winmm.lib")
 
+#pragma comment(lib, "winmm.lib")
+int is_worthy(char* path, int score){
+    FILE* high;
+    player temp;
+    int i;
+    high = fopen(path, "rb");
+    for (i = 0; i < 10; i++){
+        fread(&temp, sizeof(player), 1, high);
+        if (temp.score < score) return 1;
+    }
+    return 0;
+}
 int was_modified(char* path){
     FILE* high;
     int result;
     int last = 0;
 
-    high = fopen(path, "r");
-    result = fgetc(high);
+    high = fopen(path, "rb");
+    fseek(high, 0, SEEK_END);
+    if (ftell(high) == 0) return 1;
+    fread(&result, 1, 1, high);
     while (!feof(high)){
-        last = fgetc(high);
+        fread(&last, 1, 1, high);
         result ^= last;
     }
     result ^= last;
@@ -27,18 +40,26 @@ int was_modified(char* path){
     return 0;
 }
 
-void write_xor(char* path){
+void write_xor(char* path, int already_xored){
     FILE* high;
     int result;
-
-    high = fopen(path, "r");
-    result = fgetc(high);
-    while (!feof(high)) {
-        result ^= fgetc(high);
+    int temp;
+    int i;
+    int position = 0, end;
+    high = fopen(path, "rb");
+    fread(&result, 1, 1, high);
+    fseek(high, 0, SEEK_END);
+    end = ftell(high);
+    while (position != end) {
+        fread(&temp, 1, 1, high);
+        result ^= temp;
+        position++;
     }
+    if (already_xored) result ^= temp;
     fclose(high);
-    high = fopen(path, "a");
-    fputc(result, high);
+    high = fopen(path, "ab");
+    if (already_xored)fseek(high, -1, SEEK_END);
+    fwrite(&result, 1, 1, high);
     fclose(high);
 }
 
@@ -56,6 +77,7 @@ void sort_players(player players[11]){
         }
     }
 }
+
 void create_new_bin(char* path){
     FILE* init;
     int i;
@@ -69,6 +91,7 @@ void create_new_bin(char* path){
     }
     fclose(init);
 }
+
 void write_one_high(char* path, coord current, char* player_name){
     int i;
     int position = 0;
@@ -89,7 +112,7 @@ void write_one_high(char* path, coord current, char* player_name){
         fread(&players[i], sizeof(player), 1, high);
     }
     players[10].score =  current.score;
-    strcpy(players[10].name, name);
+    strcpy(players[10].name, player_name);
     sort_players(players);
     fclose(high);
     high = fopen(path, "wb");
@@ -240,8 +263,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
 
         }
         //write_high("C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\high_scores.txt", next.next);
-        write_one_high("C:\\Users\\bulse_eye\\Documents\\Snake-Battle\\high_scores.bin", current[0], "MISKO");
-        write_one_high("C:\\Users\\bulse_eye\\Documents\\Snake-Battle\\high_scores.bin", current[1], "DUSKO");
+
         display_map(current,previous,colors, map.timer, next.ee);
         free(previous); free(current);
         Sleep(1000);
@@ -249,5 +271,15 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
 
 
     }
-
+    if (was_modified(PATH)){
+        create_new_bin(PATH);
+        write_xor(PATH, 0);
+    }
+    for (i = 0; i < 2; i++){
+        if (is_worthy(PATH, current[i].score)){
+            //trazi mu ime
+            write_one_high(PATH, current[i], "IME");
+            write_xor(PATH, 0);
+        }
+    }
 }
