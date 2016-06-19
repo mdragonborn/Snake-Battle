@@ -25,12 +25,11 @@
 
 typedef struct option{
     chtype * tekst;
-    void * function;
 } option;
 
 chtype  * strtoch(char * string){
     int len=strlen(string), i;
-    chtype * converted=(chtype*)calloc(sizeof(chtype), len+1);
+    chtype * converted=(chtype*)calloc(sizeof(chtype), (unsigned)len+1);
     for (i=0;i<len+1;i++)
         converted[i]=(chtype)string[i];
     return converted;
@@ -120,7 +119,7 @@ void set_bckgd(int bckgd){
 
 void add_logo(int top, int left, char logo[23][35]){
     int i,j; chtype space=' ';
-    int pair=1;
+    int pair;
     for (i=0;i<23; i++)
         for(j=0;j<34;j++) {
             if(logo[i][j]!='.'){
@@ -146,7 +145,7 @@ void display_main_menu(int old_option, int new_option, option * commands, char l
     int i;
     if (old_option == -1) {
         set_bckgd(2);
-        add_logo(10, lmarg-10, logo);
+        add_logo(8, lmarg-10, logo);
         for (i = 0; i < n_commands; i++)
         {
             if (i==new_option)
@@ -172,7 +171,7 @@ void display_color_menu(int old_option, int new_option, int prev_player, int cur
     if (old_option == -1 || prev_player!=curr_player) {
         clear();
         set_bckgd(2);
-        add_logo(10, (winw-17)/2-10, logo);
+        add_logo(8, (winw-17)/2-10, logo);
         for (i = 0; i < 4; i++)
         {
             addsqr(tmarg+((i>1)?5:0), lmarg+(i%2)*5,3,color_options[i],avail[i]);
@@ -189,7 +188,7 @@ void display_color_menu(int old_option, int new_option, int prev_player, int cur
 
 void init_map(){
     erase();
-    set_bckgd(1); int i, j;
+    set_bckgd(1); int i;
     mvaddch(0,0,ACS_ULCORNER|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
     mvaddch(0,MAP_SIZE+1,ACS_URCORNER|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
     mvaddch(MAP_SIZE+1,0,ACS_LLCORNER|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
@@ -200,17 +199,6 @@ void init_map(){
         mvaddch(0, i, ACS_HLINE | COLOR_PAIR(YELLOW_BLACK) | A_BOLD);
         mvaddch(MAP_SIZE+1,i, ACS_HLINE | COLOR_PAIR(YELLOW_BLACK) | A_BOLD);
     }
-    /*for(i=0;i<MAP_SIZE+1;i++){
-        mvaddch(0,i,fill|COLOR_PAIR(1));
-        mvaddch(i,0,fill|COLOR_PAIR(1));
-        mvaddch(i,MAP_SIZE+1, fill|COLOR_PAIR(1));
-        mvaddch(MAP_SIZE+1,i,fill|COLOR_PAIR(1));
-        for (j=0;j<winw-MAP_SIZE;j++)
-            mvaddch(i,MAP_SIZE+2+j, fill|COLOR_PAIR(1));
-    }
-    for (j=0;j<winw-MAP_SIZE;j++)
-        mvaddch(MAP_SIZE+1,MAP_SIZE+1+j, fill|COLOR_PAIR(1));
-    //samo stampu*/
     return;
 }
 
@@ -248,7 +236,7 @@ void display_map(coord * current, coord * prev, int colors[4], char * time, int 
         }
     }
     else{
-        chtype next;
+        chtype next=ACS_DIAMOND;
         for(i=0;i<4;i++){
             if (current[i].x==-1) continue;
             col=color_options[colors[(ee)?(int)(rintl((mt_ldrand() * 3))) : i]];
@@ -573,10 +561,34 @@ void high_scores(){
 
 }
 
-void demo_game(){
-
-}
-
-void display_about(){
-
+void display_about(char logo[23][35]){
+    int slider=1;
+    chtype * buffer;
+    int lmarg = (winw-5)/2,
+            tmarg = 35;
+    add_logo(8, (winw-17)/2-10, logo);
+    buffer=strtoch("Milena Markovic - grafika");
+    add_chstring(tmarg+slider,lmarg-12,buffer,YELLOW_BLACK, 1);
+    free(buffer); slider++;
+    buffer=strtoch("Jelena Savic - vestacka inteligencija");
+    add_chstring(tmarg+slider,lmarg-17,buffer,YELLOW_BLACK, 1);
+    free(buffer); slider++;
+    buffer=strtoch("Milan Zaric - logika igre");
+    add_chstring(tmarg+slider,lmarg-12,buffer,YELLOW_BLACK, 1);
+    free(buffer); slider++;
+    buffer=strtoch("Nikola Bebic - mentor");
+    add_chstring(tmarg+slider,lmarg-10,buffer,YELLOW_BLACK, 1);
+    free(buffer); slider+=3;
+    buffer=strtoch("Elektrotehnicki fakultet");
+    add_chstring(tmarg+slider,lmarg-11,buffer,RED_BLACK, 0);
+    free(buffer); slider++;
+    buffer=strtoch("Univerziteta u Beogradu");
+    add_chstring(tmarg+slider,lmarg-11,buffer,RED_BLACK, 0);
+    free(buffer); slider+=2;
+    buffer=strtoch("2016");
+    add_chstring(tmarg+slider,lmarg-2,buffer,YELLOW_BLACK, 1);
+    free(buffer);
+    refresh();
+    slider=getch();
+    return;
 }

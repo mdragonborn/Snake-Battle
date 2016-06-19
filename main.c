@@ -12,7 +12,7 @@ int main() {
     colors[0]=0; colors[1]=1; colors[2]=2; colors[3]=3;
     commands[0].tekst = strtoch("Nova igra");
     commands[1].tekst = strtoch("High scores");
-    commands[2].tekst = strtoch("Podesavanja");
+    commands[2].tekst = strtoch("Settings");
     commands[3].tekst = strtoch("Demo");
     commands[4].tekst = strtoch("About");
     commands[5].tekst = strtoch("Izlaz");
@@ -63,6 +63,9 @@ int main() {
                         exit(0);
                     case 0:
                         newgame_menu(logo, colors);
+                        break;
+                    case 4:
+                        display_about(logo);
                         break;
                     case 2:
                         pick_colors(colors, logo);

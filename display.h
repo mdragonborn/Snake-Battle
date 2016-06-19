@@ -23,7 +23,6 @@
 
 typedef struct option{
     chtype * tekst;
-    void * function;
 } option;
 
 chtype  * strtoch(char * string);
@@ -43,7 +42,6 @@ int pick_bot_levels(int * bot_count, int bot_level[2], char logo[23][35]);
 int pick_botcount(int * player_count, int * bot_count, int * bot_level,char logo[23][35]);
 int pick_player_number(int * player_count,int * bot_count, int bot_level[2], char logo[23][35]);
 void high_scores();
-void demo_game();
-void display_about();
+void display_about(char logo[23][35]);
 
 #endif //DEMOMENI_DISPLAY_H
