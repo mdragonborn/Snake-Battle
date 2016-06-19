@@ -20,7 +20,6 @@ typedef struct coordinates {
     int y;
     int dir;
     int blank;
-    char name[10];
     int score;
 }coord;
 
