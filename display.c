@@ -202,12 +202,25 @@ void init_map(){
     return;
 }
 
+void toggle_pause(int pause){
+    chtype psch[]={ACS_CKBOARD, ' ', ACS_CKBOARD, 0};
+    chtype clear[]={' ', ' ', ' ', 0};
+    if(pause)
+        add_chstring(4, MAP_SIZE+2, psch, YELLOW_BLACK,1);
+    else
+        add_chstring(4,MAP_SIZE+2,clear,YELLOW_BLACK,0);
+    return;
+}
+
 void display_map(coord * current, coord * prev, int colors[4], char * time, int ee){
     int i, col;
     int color_options[]={BLUE_BLACK,GREEN_BLACK,RED_BLACK,WHITE_BLACK};
     chtype * timech=strtoch(time);
-    add_chstring(4, MAP_SIZE+3,timech,YELLOW_BLACK,1);
+    add_chstring(4, MAP_SIZE+6,timech,YELLOW_BLACK,1);
     free(timech);
+
+
+
     if (prev[0].x==prev[1].x && prev[0].x==0){
         for (i=0;i<4;i++) {
             if (current[i].x==-1) continue;
