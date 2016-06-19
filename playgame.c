@@ -122,7 +122,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     lives = calloc(sizeof(int), 4);
     prev_lives = calloc(sizeof(int), 4);
     PlaySound(TEXT("snake_battle_music.wav"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
-
+    create_new_bin("C:\\Users\\bulse_eye\\Documents\\Snake-Battle\\high_scores.bin");
     current_time = 0;
     first = 1;
     while (1) {
