@@ -317,10 +317,14 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
 
     if (lives[2] != 0) {
         new_coord[2] =  mediumbot(current[2].x, current[2].y, current[2].dir, map.brd );// : hard_botovi[0];
+        new_coord[2].score = current[2].score;
     }
     else new_coord[2] = current[2];
 
-    if (lives[3] != 0) new_coord[3] =  mediumbot(current[3].x, current[3].y, current[3].dir, map.brd );// : hard_botovi[1];
+    if (lives[3] != 0) {
+        new_coord[3] =  mediumbot(current[3].x, current[3].y, current[3].dir, map.brd );
+        new_coord[3].score = current[3].score;
+    }// : hard_botovi[1];
     else new_coord[3] = current[3];
     if (input == 224 && current[1].x != -1) {
         input = _getch();

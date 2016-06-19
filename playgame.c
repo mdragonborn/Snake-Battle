@@ -132,7 +132,6 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     next_m next;
     coord * current, * previous;
     board map=make_map(MAP_SIZE);
-
     Timer t;
     int pom_timer;
     int play = 1;
