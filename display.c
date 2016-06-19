@@ -205,10 +205,16 @@ void init_map(){
 void toggle_pause(int pause){
     chtype psch[]={ACS_CKBOARD, ' ', ACS_CKBOARD, 0};
     chtype clear[]={' ', ' ', ' ', 0};
-    if(pause)
-        add_chstring(4, MAP_SIZE+2, psch, YELLOW_BLACK,1);
-    else
-        add_chstring(4,MAP_SIZE+2,clear,YELLOW_BLACK,0);
+    if(pause) {
+        add_chstring(5, MAP_SIZE + 8, psch, YELLOW_BLACK, 1);
+        add_chstring(6, MAP_SIZE+8, psch, YELLOW_BLACK,1);
+        add_chstring(7, MAP_SIZE+8, psch, YELLOW_BLACK,1);
+    }
+    else {
+        add_chstring(5, MAP_SIZE + 8, clear, YELLOW_BLACK, 1);
+        add_chstring(6, MAP_SIZE+8, clear, YELLOW_BLACK,1);
+        add_chstring(7, MAP_SIZE+8, clear, YELLOW_BLACK,1);
+    }
     return;
 }
 
