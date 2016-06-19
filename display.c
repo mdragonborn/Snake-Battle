@@ -35,12 +35,20 @@ chtype  * strtoch(char * string){
     return converted;
 }
 
+chtype * numtoch(int num){
+    char string[3];
+    itoa(num,string,10);
+    chtype * converted=strtoch(string);
+    return converted;
+}
+
 void add_chstring(int top, int left, chtype * string, int color_pair, int bold){
     int i;
     if (bold) for(i=0;string[i]!=0;i++)
             mvaddch(top, left+i,string[i]|COLOR_PAIR(color_pair)|A_BOLD);
     else for(i=0;string[i]!=0;i++)
             mvaddch(top, left+i,string[i]|COLOR_PAIR(color_pair));
+    return;
 }
 
 void addsqr(int top, int left, int size, int color_pair, int bold){
@@ -218,15 +226,40 @@ void toggle_pause(int pause){
     return;
 }
 
+void update_score(chtype names[4][10], int color[],coord * current, int color_pairs[]){
+    int stampano[4]={0}; int i,j, max, player, allPrinted=4;
+    chtype clear[]={' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',0};
+    chtype * score;
+    while(allPrinted){
+        max=-1;
+        for(j=0;j<4;j++){
+            if (allPrinted==4 && current[j].x==-1) {
+                stampano[j]=1;
+                allPrinted--;
+            }
+            if (current[j].x!=-1 && current[j].score>max && !stampano[j]){
+                max=current[j].score;
+                player=j;
+            }
+        }
+        score=numtoch(current[player].score);
+        add_chstring(14-allPrinted,MAP_SIZE+4,clear,BGD,1);
+        add_chstring(14-allPrinted,MAP_SIZE+4,names[color[player]],color_pairs[color[player]],1);
+        add_chstring(14-allPrinted, MAP_SIZE+16, score, color_pairs[color[player]],1);
+        free(score);
+        stampano[player]=1; allPrinted--;
+    }
+    return;
+}
+
 void display_map(coord * current, coord * prev, int colors[4], char * time, int ee){
     int i, col;
+    chtype names[4][10]={{'B','l','u','e','b','e','l','l',0},{'G','r','e','e','n','l','e','e',0},{'F','r','e','d',0},{'G','r','e','y','d','o','n',0}};
     int color_options[]={BLUE_BLACK,GREEN_BLACK,RED_BLACK,WHITE_BLACK};
     chtype * timech=strtoch(time);
     add_chstring(4, MAP_SIZE+6,timech,YELLOW_BLACK,1);
+    update_score(names,colors, current, color_options);
     free(timech);
-
-
-
     if (prev[0].x==prev[1].x && prev[0].x==0){
         for (i=0;i<4;i++) {
             if (current[i].x==-1) continue;
