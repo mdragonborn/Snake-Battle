@@ -20,6 +20,14 @@
 #define OFFX 0
 #define OFFY 0
 #define fill 65584
+<<<<<<< HEAD
+=======
+
+typedef struct sPlayer {
+    char name[10];
+    int score;
+}player;
+>>>>>>> origin/master
 
 typedef struct option{
     chtype * tekst;
