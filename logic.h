@@ -21,6 +21,7 @@ typedef struct coordinates {
     int dir;
     int blank;
     int score;
+    int bot_level;
 }coord;
 
 typedef struct board_with_dimens {
@@ -40,7 +41,7 @@ typedef struct next_move_with_delay {
 int time_to_str(double x, char* timer);
 int toggle(int a);
 next_m next_move(board map, coord* current, int moves, int* lives, int* prev_lives, int* zvuk, int E);
-coord* initialise(board map, int br_botova, int br_igraca, int moves, int* lives, int first, int* scores);
+coord* initialise(board map, int br_botova, int br_igraca, int moves, int* lives, int first, int* scores, int* bot_level);
 void copy_coord(coord * source, coord * target);
 board reset_board(board map);
 void error();

@@ -160,7 +160,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
         blank1 = blank2 = blank3 = blank4 = 0;
         brojac = 0;
         map = reset_board(map);
-        current = initialise(map, bot_count, player_count, map.moves, lives, first, scores);
+        current = initialise(map, bot_count, player_count, map.moves, lives, first, scores, bot_level);
         first = 0;
         map.heads = current;
         init_map();

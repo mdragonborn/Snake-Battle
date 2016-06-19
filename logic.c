@@ -80,6 +80,7 @@ void copy_coord(coord *source, coord *target) {
         target[i].dir = source[i].dir;
         target[i].blank = source[i].blank;
         target[i].score = source[i].score;
+        target[i].bot_level = source[i].bot_level;
     }
     return;
 }
@@ -307,10 +308,12 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
         }
     }
 
-    if (lives[2] != 0) new_coord[2] = mediumbot(current[2].x, current[2].y, current[2].dir, map.brd );
+    hard_botovi = hardbot(map, current, kopija);
+
+    if (lives[2] != 0) new_coord[2] = (current[2].bot_level == 0) ? mediumbot(current[2].x, current[2].y, current[2].dir, map.brd ) : hard_botovi[0];
     else new_coord[2] = current[2];
 
-    if (lives[3] != 0) new_coord[3] = mediumbot(current[3].x, current[3].y, current[3].dir, map.brd );
+    if (lives[3] != 0) new_coord[3] = (current[3].bot_level == 0) ? mediumbot(current[3].x, current[3].y, current[3].dir, map.brd ) : hard_botovi[1];
     else new_coord[3] = current[3];
     if (input == 224 && current[1].x != -1) {
         input = _getch();
@@ -415,6 +418,7 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
     }
     check_death(map, new_coord, lives);
     overwrite = did_just_die(prev_lives, lives);
+
     if (did_death_occur(lives, prev_lives)) {
         for (i = 0; i < 4; i++){
             if (lives[i]) new_coord[i].score = current[i].score + 1;
@@ -451,12 +455,11 @@ void update_map(board map, coord *current) {
 
 }
 
-coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives, int first, int* scores) {
+coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives, int first, int* scores, int* bot_level) {
     coord *new, *new1;
     int i;
 
     new = malloc(sizeof(coord) * 4);
-    new1 = malloc(sizeof(coord)* 4);
     new[0].x = (int) rintl((mt_ldrand() * (map.n - 1))) + 1;
     new[0].y = (int) rintl((mt_ldrand() * (map.n - 1))) + 1;
     new[0].dir = (int) rintl((mt_ldrand() * 3));
@@ -501,6 +504,7 @@ coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives
         new[i + 2].x = (int) rintl((mt_ldrand() * (map.n - 1))) + 1;
         new[i + 2].y = (int) rintl((mt_ldrand() * (map.n - 1))) + 1;
         new[i + 2].dir = (int) rintl((mt_ldrand() * 3));
+        new[i+2].bot_level = bot_level[i];
         while (new[0].x == 1 && new[i + 2].dir == 0) {
             new[i + 2].dir = (int) rintl((mt_ldrand() * 3));
         }
