@@ -11,7 +11,25 @@
 #include "ai.h"
 #include <Windows.h>
 #pragma comment(lib, "winmm.lib")
-extern E;
+
+int did_death_occur(int* lives, int* prev){
+    int i;
+
+    for (i = 0; i < 4; i++){
+        if (lives[i] != prev[i]) return 1;
+    }
+    return 0;
+}
+
+void update_score(coord current[4], int* lives){
+    int i;
+
+    for (i = 0; i < 4; i++){
+        if (lives[i]) current[i].score += 1;
+    }
+
+}
+
 void time_to_str(double x, char* timer){
     int pom;
     char pom2[4];
@@ -148,7 +166,7 @@ next_m next_move(board map, coord *current, int moves, int* lives, int* prev_liv
 int *check_death(board map, coord current[4], int* lives) {
 
     int i;
-    //if (current[0].x == current[1].x && current[0].y == current[1].y) return 3;
+
     for (i = 0; i < 4; i++) {
         if (current[i].x != -1) {
             if ((current[i].x < 0 || current[i].x > map.n + 1) || (current[i].y < 0 || current[i].y > map.n + 1)){
@@ -399,6 +417,9 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
     }
     check_death(map, new_coord, lives);
     overwrite = did_just_die(prev_lives, lives);
+    if (did_death_occur(lives, prev_lives)) {
+        update_score(new_coord, lives);
+    }
     wall = is_in_wall(new_coord, map);
     for (i = 0; i < 4; i++){
         if ((lives[i] == 0 && !overwrite[i]) || wall[i]){
@@ -433,6 +454,7 @@ void update_map(board map, coord *current) {
 coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives) {
     coord *new;
     int i;
+    char* names[] = {"Fred", "Greenlee", "Greydon", "Bluebell"};
     new = malloc(sizeof(coord) * 4);
     new[0].x = (int) rintl((mt_ldrand() * (map.n - 1))) + 1;
     new[0].y = (int) rintl((mt_ldrand() * (map.n - 1))) + 1;
@@ -496,6 +518,10 @@ coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives
         new[3-i].x = -1;
         new[3-i].y = -1;
         new[3-i].dir = -1;
+    }
+    for (i = 0; i < 4; i++){
+        new[i].score = 0;
+        strcpy(new[i].name, names[i]);
     }
 
     update_map(map, new);

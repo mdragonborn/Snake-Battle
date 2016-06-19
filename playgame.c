@@ -7,6 +7,86 @@
 #include <math.h>
 #include "timers.h"
 #pragma comment(lib, "winmm.lib")
+int was_modified(char* path){
+    FILE* high;
+    int result;
+    int last = 0;
+
+    high = fopen(path, "r");
+    result = fgetc(high);
+    while (!feof(high)){
+        last = fgetc(high);
+        result ^= last;
+    }
+    result ^= last;
+    fclose(high);
+    if (last != result) return 1;
+    return 0;
+}
+
+void write_xor(char* path){
+    FILE* high;
+    int result;
+
+    high = fopen(path, "r");
+    result = fgetc(high);
+    while (!feof(high)) {
+        result ^= fgetc(high);
+    }
+    fclose(high);
+    high = fopen(path, "a");
+    fputc(result, high);
+    fclose(high);
+}
+void read_name(FILE* high, char* name){
+
+    int i = 0;
+    int c;
+    while (((c = fgetc(high)) != '|' ) && !feof(high)) {
+        name[i++] = (char) c;
+    }
+    name[i] = '\0';
+}
+
+
+int read_score(FILE* high){
+    char br[4];
+    int score;
+    int c;
+    int i = 0;
+
+    while ((c = fgetc(high)) != '\n'){
+        if (feof(high)) return 0;
+        br[i++] = (char) c;
+    }
+    br[i] = '\0';
+    score = atoi(br);
+    return score;
+}
+
+void write_high(char* path, coord current[4]){
+    FILE* high;
+    int i;
+    int cur_score = 10000;
+    int cur_position;
+    char name[11];
+
+    high = fopen(path, "r+");
+    for (i = 0; i < 2; i++) {
+        fseek(high, 0, SEEK_SET);
+        cur_position = ftell(high);
+        while (current[i].score < cur_score) {
+            cur_position = ftell(high);
+            read_name(high, name);
+            cur_score = read_score(high);
+        }
+        fseek(high, cur_position, SEEK_SET);
+        fprintf(high, "%s|%d\n", current[i].name, current[i].score);
+
+    }
+    fclose(high);
+
+}
 
 int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     int mode = 1;
@@ -126,6 +206,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
             prva = 0;
             stop_timer(&t);
         }
+        write_high("C:\\Users\\bulse_eye\\Desktop\\Snake-Battle\\high_score.txt", next.next);
         display_map(current,previous,colors, map.timer, next.ee);
         free(previous); free(current);
         Sleep(1000);

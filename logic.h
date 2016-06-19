@@ -20,6 +20,8 @@ typedef struct coordinates {
     int y;
     int dir;
     int blank;
+    char name[10];
+    int score;
 }coord;
 
 typedef struct board_with_dimens {
@@ -50,7 +52,7 @@ coord zero_case(coord current);
 coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, board map, int* lives, int* prev_lives);
 int game_over(int* lives);
 void update_map(board map, coord* current);
-
 int players_dead(int* lives);
-
+int did_death_occur(int* lives, int* prev);
+void update_score(coord current[4], int* lives);
 #endif //PROJEKAT_LOGIC_H
