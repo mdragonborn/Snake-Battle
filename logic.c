@@ -322,13 +322,17 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
     free(kopija);
 
     if (lives[2] != 0) {
-        new_coord[2] = (current[2].bot_level == 1) ? mediumbot(current[2].x, current[2].y, current[2].dir, map.brd ) : hard_botovi[0];
+        if (current[2].bot_level == 1) new_coord[2] = mediumbot(current[2].x, current[2].y, current[2].dir, map.brd );
+        else if (current[2].bot_level == 2) new_coord[2] = hard_botovi[0];
+        new_coord[2].bot_level = current[2].bot_level;
         new_coord[2].score = current[2].score;
     }
     else new_coord[2] = current[2];
 
     if (lives[3] != 0) {
-        new_coord[3] = (current[3].bot_level == 1) ? mediumbot(current[3].x, current[3].y, current[3].dir, map.brd ) : hard_botovi[1];
+        if (current[3].bot_level == 1) new_coord[3] =  mediumbot(current[3].x, current[3].y, current[3].dir, map.brd );
+        else if (current[3].bot_level == 2) new_coord[3] = hard_botovi[1];
+        new_coord[3].bot_level = current[3].bot_level;
         new_coord[3].score = current[3].score;
     }
     else new_coord[3] = current[3];
