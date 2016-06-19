@@ -401,7 +401,7 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
     overwrite = did_just_die(prev_lives, lives);
     wall = is_in_wall(new_coord, map);
     for (i = 0; i < 4; i++){
-        if ((lives[i] == 0 && !overwrite[i])){
+        if ((lives[i] == 0 && !overwrite[i]) || wall[i]){
             new_coord[i] = backup[i];
         }
     }
