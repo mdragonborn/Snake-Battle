@@ -9,13 +9,9 @@
 
 
 int main() {
-
+    int abc[] = {0, 0, 0, 0};
     option commands[6];
     int colors[4];
-    if (was_modified(PATH)) {
-        create_new_bin(PATH);
-    }
-
 
     colors[0]=0; colors[1]=1; colors[2]=2; colors[3]=3;
     commands[0].tekst = strtoch("Nova igra");
@@ -81,6 +77,9 @@ int main() {
                     case 2:
                         pick_colors(colors, logo);
                         break;
+                    case 3:
+                        play_demo(2, 2, abc, colors, logo);
+
                     default:
                         break;
                 }

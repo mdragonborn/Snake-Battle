@@ -107,6 +107,28 @@ void error() {
     exit(1);
 }
 
+next_m next_move_bot(board map, coord *current, int moves, int* lives, int* prev_lives) {
+    next_m vrati;
+    int input, hor1, hor2;
+    double TIMEOUT;
+    clock_t target, start, end;
+
+    vrati.next = calloc(sizeof(coord), 4);
+    vrati.ee = 0;
+    input = 0;
+    TIMEOUT = (0.04 * CLOCKS_PER_SEC);
+
+    vrati.delay = TIMEOUT;
+    if (vrati.delay < 0) vrati.delay = TIMEOUT;
+    hor1 = (current[0].dir == 1 || current[0].dir == 3);
+    hor2 = (current[1].dir == 1 || current[1].dir == 3);
+
+    vrati.next = move_player_bot(current, map, lives, prev_lives);
+
+
+    return vrati;
+}
+
 next_m next_move(board map, coord *current, int moves, int* lives, int* prev_lives, int* zvuk, int E, int* rupice) {
     next_m vrati;
     int input, hor1, hor2;
@@ -283,6 +305,84 @@ int* did_just_die(int* prev_lives, int* lives){
     vrati = calloc(sizeof(int), 4);
     for (i = 0; i < 4; i++) vrati[i] = lives[i] ^ prev_lives[i];
     return vrati;
+
+}
+coord *move_player_bot(coord current[4], board map, int* lives, int* prev_lives){
+    int *overwrite;
+    int* wall;
+    int points;
+    coord *new_coord;
+    coord *backup;
+    coord* hard_botovi1;
+    int** kopija;
+    int i, j, k;
+    new_coord = malloc(sizeof(coord)*4);
+    backup = calloc(sizeof(coord), 4);
+    copy_coord(current, backup);
+    new_coord[0] = current[0];
+    new_coord[1] = current[1];
+    kopija = malloc(sizeof(int *) * (map.n + 2));
+    if (kopija == NULL) error();
+    for (i = 0; i < map.n + 2; i++) {
+        kopija[i] = malloc(sizeof(int) * (map.n + 2));
+        for (k = 0; k < map.n + 2; k++){
+            kopija[i][k] = map.brd[i][k];
+        }
+        if (kopija[i] == NULL) {
+            kopija = NULL;
+            error();
+            break;
+        }
+    }
+    hard_botovi1 = hardbot(map, current, kopija, lives);
+    for (i = 0; i < map.n+2; i++){
+        free(kopija[i]);
+    }
+    free(kopija);
+    if (lives[0] != 0) {
+        new_coord[0] = mediumbot(current[0].x, current[0].y, current[0].dir, map.brd );
+        new_coord[0].bot_level = current[0].bot_level;
+        new_coord[0].score = current[0].score;
+    }
+    else new_coord[0] = current[0];
+
+    if (lives[1] != 0) {
+        new_coord[1] =  mediumbot(current[1].x, current[1].y, current[1].dir, map.brd );
+        new_coord[1].bot_level = current[1].bot_level;
+        new_coord[1].score = current[1].score;
+    }
+    else new_coord[1] = current[1];
+
+    if (lives[2] != 0) {
+        new_coord[2] = hard_botovi1[0];
+        new_coord[2].score = current[2].score;
+    }
+    else new_coord[2] = current[2];
+
+    if (lives[3] != 0) {
+        new_coord[3] = hard_botovi1[1];
+        new_coord[3].score = current[3].score;
+    }
+    else new_coord[3] = current[3];
+
+    check_death(map, new_coord, lives);
+    overwrite = did_just_die(prev_lives, lives);
+
+    if (points = did_death_occur(lives, prev_lives)) {
+        for (i = 0; i < 4; i++){
+            if (lives[i]) new_coord[i].score = current[i].score + points;
+        }
+    }
+    wall = is_in_wall(new_coord, map);
+    for (i = 0; i < 4; i++){
+        if ((lives[i] == 0 && !overwrite[i]) || wall[i]){
+            new_coord[i] = backup[i];
+        }
+    }
+    return new_coord;
+
+
+
 
 }
 coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, board map, int* lives, int* prev_lives) {
@@ -480,7 +580,7 @@ void update_map(board map, coord *current) {
 
 }
 
-coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives, int first, int* scores, int* bot_level) {
+coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives, int first, int* scores, int* bot_level, int demo) {
     coord *new, *new1;
     int i;
 
@@ -561,7 +661,8 @@ coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives
     }
 
     update_map(map, new);
-    new1 = move_player(new, 0, 0, 0, moves, map, lives, lives);
+    if (demo) new1 = move_player_bot(new, map, lives, lives);
+    else new1 = move_player(new, 0, 0, 0, moves, map, lives, lives);
     update_map(map, new1);
     free(new);
 
