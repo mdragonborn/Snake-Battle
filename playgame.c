@@ -279,6 +279,7 @@ int play_demo(int player_count, int bot_count, int bot_level[2], int colors[4], 
 int play_game(int player_count, int bot_count, int bot_level[2], int colors[4], char logo[23][35]){
     FILE* high;
     int rupice = 0;
+    int bonus = 0;
     player* worthy_one;
     int mode = 1;
     int sound = 1;
@@ -336,11 +337,11 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4], 
                 blank4 = (int) rintl((mt_ldrand() * 9)) + 1;
             }
             if (E == 0){
-                next=next_move(map,current, map.moves, lives, prev_lives, &sound, 0, &rupice);
+                next=next_move(map,current, map.moves, lives, prev_lives, &sound, 0, &rupice, &bonus);
 
             }
             else {
-                next=next_move(map,current, map.moves, lives, prev_lives, &sound, next.ee, &rupice);
+                next=next_move(map,current, map.moves, lives, prev_lives, &sound, next.ee, &rupice, &bonus);
             }
             E = 1;
             if (next.delay == -32){

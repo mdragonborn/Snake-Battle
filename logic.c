@@ -11,7 +11,7 @@
 #include "ai.h"
 #include <Windows.h>
 #pragma comment(lib, "winmm.lib")
-
+coord myBot(board b, coord s);
 int did_death_occur(int* lives, int* prev){
     int i;
     int deaths = 0;
@@ -72,7 +72,7 @@ int time_to_str(double x, char* timer){
 int toggle(int a){
     return a == 1 ? 0 : 1;
 }
-coord myBot(board b, coord s);
+
 
 void copy_coord(coord *source, coord *target) {
     int i;
@@ -130,7 +130,7 @@ next_m next_move_bot(board map, coord *current, int moves, int* lives, int* prev
     return vrati;
 }
 
-next_m next_move(board map, coord *current, int moves, int* lives, int* prev_lives, int* zvuk, int E, int* rupice) {
+next_m next_move(board map, coord *current, int moves, int* lives, int* prev_lives, int* zvuk, int E, int* rupice, int* bonus) {
     next_m vrati;
     int input, hor1, hor2;
     double TIMEOUT;
@@ -163,7 +163,7 @@ next_m next_move(board map, coord *current, int moves, int* lives, int* prev_liv
             *zvuk = toggle(*zvuk);
             PlaySound(TEXT("snake_battle_music.wav"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
         }
-        vrati.next = move_player(current, 0, hor1, hor2, moves, map, lives, prev_lives);
+        vrati.next = move_player(current, 0, hor1, hor2, moves, map, lives, prev_lives, *bonus);
     }
     else if (input == 32){
         vrati.delay = -32;
@@ -175,13 +175,16 @@ next_m next_move(board map, coord *current, int moves, int* lives, int* prev_liv
         *rupice = toggle(*rupice);
 
     }
+    else if (input == 'u'){
+        *bonus = toggle(*bonus);
+    }
 
     if (input != 'm'){
         if (input == '9'){
             vrati.ee = 1;
             PlaySound(TEXT("snake_battle.bin"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
         }
-        vrati.next = move_player(current, input, hor1, hor2, moves, map, lives, prev_lives);
+        vrati.next = move_player(current, input, hor1, hor2, moves, map, lives, prev_lives, *bonus);
     }
 
     return vrati;
@@ -386,7 +389,7 @@ coord *move_player_bot(coord current[4], board map, int* lives, int* prev_lives)
 
 
 }
-coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, board map, int* lives, int* prev_lives) {
+coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, board map, int* lives, int* prev_lives, int bonus) {
     int points;
     coord *new_coord;
     coord *backup;
@@ -427,7 +430,8 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
     free(kopija);
 
     if (lives[2] != 0) {
-        if (current[2].bot_level == 1) new_coord[2] = mediumbot(current[2].x, current[2].y, current[2].dir, map.brd );
+        if (bonus) new_coord[2] = myBot(map, current[2]);
+        else if (current[2].bot_level == 1) new_coord[2] = mediumbot(current[2].x, current[2].y, current[2].dir, map.brd );
         else if (current[2].bot_level == 2) new_coord[2] = hard_botovi[0];
         new_coord[2].bot_level = current[2].bot_level;
         new_coord[2].score = current[2].score;
@@ -663,7 +667,7 @@ coord *initialise(board map, int br_botova, int br_igraca, int moves, int* lives
 
     update_map(map, new);
     if (demo) new1 = move_player_bot(new, map, lives, lives);
-    else new1 = move_player(new, 0, 0, 0, moves, map, lives, lives);
+    else new1 = move_player(new, 0, 0, 0, moves, map, lives, lives, 0);
     update_map(map, new1);
     free(new);
 
