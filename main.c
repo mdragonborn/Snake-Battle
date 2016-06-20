@@ -9,12 +9,14 @@
 
 
 int main() {
+
     option commands[6];
     int colors[4];
     if (was_modified(PATH)){
         create_new_bin(PATH);
-        write_xor(PATH, 0);
+        write_xor(PATH);
     }
+
 
     colors[0]=0; colors[1]=1; colors[2]=2; colors[3]=3;
     commands[0].tekst = strtoch("Nova igra");
