@@ -43,7 +43,7 @@ chtype * numtoch(int num){
 void add_chstring(int top, int left, chtype * string, int color_pair, int bold){
     int i;
     if (bold) for(i=0;string[i]!=0;i++)
-            mvaddch(top, left+i,string[i]|COLOR_PAIR((string[i]=='9')?RED_BLACK:color_pair)|A_BOLD);
+            mvaddch(top, left+i,string[i]|COLOR_PAIR(color_pair)|A_BOLD);
     else for(i=0;string[i]!=0;i++)
             mvaddch(top, left+i,string[i]|COLOR_PAIR(color_pair));
     return;

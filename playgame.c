@@ -7,13 +7,10 @@
 #include "timers.h"
 #include "playgame.h"
 #include <conio.h>
-
+#include "display.h"
 
 #pragma comment(lib, "winmm.lib")
-void display_map(coord * current, coord * prev, int colors[4], char * time, int ee);
-void init_map();
-void toggle_pause(int pause);
-player* loadScore(int score, int color, char logo[23][35]);
+
 
 int is_worthy(char* path, int score){
     FILE* high;
@@ -144,6 +141,7 @@ void write_one_high(char* path, coord current, char* player_name){
 
     fclose(high);
 
+
 }
 int play_demo(int player_count, int bot_count, int bot_level[2], int colors[4], char logo[23][35]){
 
@@ -191,9 +189,9 @@ int play_demo(int player_count, int bot_count, int bot_level[2], int colors[4], 
 
         while(1){
             if (_kbhit()) {
-                input = _getch();
+                PlaySound(NULL, NULL, 0);
+                return 0;
             }
-            if (input == 27) return 0;
             prva = 1;
 
             if (!prva) current_time += stop_timer(&t);
@@ -249,7 +247,7 @@ int play_demo(int player_count, int bot_count, int bot_level[2], int colors[4], 
                 copy_coord(current, previous);
                 copy_coord(next.next, current);
                 map.heads = next.next;
-                display_map(current, previous, colors, map.timer, next.ee);
+                display_map(current, previous, colors, "99:99:99", next.ee);
                 update_map(map, next.next);
                 for (i = 0; i < 4; i++){
                     scores[i] = next.next[i].score;
@@ -274,6 +272,7 @@ int play_demo(int player_count, int bot_count, int bot_level[2], int colors[4], 
         create_new_bin(PATH);
         write_xor(PATH);
     }*/
+
 
 }
 
@@ -324,7 +323,9 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4], 
 
         while(1){
             if (!prva) current_time += stop_timer(&t);
+
             play = time_to_str(current_time, map.timer);
+            
             start_timer(&t);
             brojac = brojac % 10 + 1;
             map.moves++;

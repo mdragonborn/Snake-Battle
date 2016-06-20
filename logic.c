@@ -25,7 +25,7 @@ int did_death_occur(int* lives, int* prev){
 int time_to_str(double x, char* timer){
     int pom;
     char pom2[4];
-    double target = 15*1000; //120000;
+    double target = 120000;
     target -= x;
     if (target <= 0) return 0;
     pom = (((int)target) / 60000);
