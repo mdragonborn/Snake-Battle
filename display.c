@@ -272,9 +272,9 @@ void update_score(chtype names[4][10], int color[],coord * current, int color_pa
             }
         }
         score=numtoch(current[player].score);
-        add_chstring(14-allPrinted,MAP_SIZE+4,clear,BGD,1);
-        add_chstring(14-allPrinted,MAP_SIZE+4,names[color[player]],color_pairs[color[player]],1);
-        add_chstring(14-allPrinted, MAP_SIZE+16, score, color_pairs[color[player]],1);
+        add_chstring(24-allPrinted*2,MAP_SIZE+4,clear,BGD,1);
+        add_chstring(24-allPrinted*2,MAP_SIZE+4,names[color[player]],color_pairs[color[player]],1);
+        add_chstring(24-allPrinted*2, MAP_SIZE+16, score, color_pairs[color[player]],1);
         free(score);
         stampano[player]=1; allPrinted--;
     }
