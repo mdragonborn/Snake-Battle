@@ -73,7 +73,7 @@ int main() {
                         newgame_menu(logo, colors);
                         break;
                     case 1:
-                        high_scores("C:\\Users\\bulse_eye\\Documents\\Snake-Battle\\high_scores.bin");
+                        high_scores(PATH);
                         break;
                     case 4:
                         display_about(logo);
