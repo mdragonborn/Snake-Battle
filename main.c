@@ -69,7 +69,7 @@ int main() {
                         newgame_menu(logo, colors);
                         break;
                     case 1:
-                        high_scores(PATH);
+                        high_scores(PATH, logo);
                         break;
                     case 4:
                         display_about(logo);

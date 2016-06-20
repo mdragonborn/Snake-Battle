@@ -9,7 +9,7 @@
 #include "display.h"
 
 #define winh 52
-#define winw 80
+#define winw 70
 #define BGD 2
 #define BGDC 6
 #define BOARD_SIZE 30
@@ -43,7 +43,7 @@ chtype * numtoch(int num){
 void add_chstring(int top, int left, chtype * string, int color_pair, int bold){
     int i;
     if (bold) for(i=0;string[i]!=0;i++)
-            mvaddch(top, left+i,string[i]|COLOR_PAIR(color_pair)|A_BOLD);
+            mvaddch(top, left+i,string[i]|COLOR_PAIR((string[i]=='9')?RED_BLACK:color_pair)|A_BOLD);
     else for(i=0;string[i]!=0;i++)
             mvaddch(top, left+i,string[i]|COLOR_PAIR(color_pair));
     return;
@@ -169,38 +169,38 @@ void add_logo(int top, int left, char logo[23][35]){
 
 void display_main_menu(int old_option, int new_option, option * commands, char logo[23][35], int n_commands) { //n_commands ???
     chtype dot[]={'<', ' ' ,'>', ' ',0}, selected[]={'<',ACS_DIAMOND,'>', ' ',0};
-    int lmarg = (winw-25)/2,
-            tmarg = 35;
+    int lmarg = (winw-15)/2,
+            tmarg = 31;
     int i;
     if (old_option == -1) {
         set_bckgd(2);
-        add_logo(8, 18, logo);
+        add_logo(5, 18, logo);
         for (i = 0; i < n_commands; i++)
         {
             if (i==new_option)
-                add_chstring(tmarg+i+1,lmarg,selected, 2, 0);
+                add_chstring(tmarg+2*i+1,lmarg,selected, 2, 0);
             else
-                add_chstring(tmarg+i+1,lmarg,dot, 2, 0);
-            add_chstring(tmarg+i+1,lmarg+4,commands[i].tekst, 2, 0);
+                add_chstring(tmarg+2*i+1,lmarg,dot, 2, 0);
+            add_chstring(tmarg+2*i+1,lmarg+4,commands[i].tekst, 2, 0);
 
         }
     }
     else {
-        add_chstring(tmarg+old_option+1,lmarg,dot, 2, 0);
-        add_chstring(tmarg+new_option+1,lmarg,selected, 2, 0);
+        add_chstring(tmarg+2*old_option+1,lmarg,dot, 2, 0);
+        add_chstring(tmarg+2*new_option+1,lmarg,selected, 2, 0);
     }
     refresh();
 }
 
 void display_color_menu(int old_option, int new_option, int prev_player, int curr_player, char logo[23][35], int avail[4]){
-    int lmarg = (winw-20)/2,
-            tmarg = 40;
+    int lmarg = (winw-10)/2,
+            tmarg = 35;
     int color_options[]={BLUE_BLACK,GREEN_BLACK,RED_BLACK,WHITE_BLACK};
     int i;
     if (old_option == -1 || prev_player!=curr_player) {
         clear();
         set_bckgd(2);
-        add_logo(8, 18, logo);
+        add_logo(5, 18, logo);
         for (i = 0; i < 4; i++)
         {
             addsqr(tmarg+((i>1)?5:0), lmarg+(i%2)*5,3,color_options[i],avail[i]);
@@ -227,6 +227,14 @@ void init_map(){
         mvaddch(i, MAP_SIZE+1, ACS_VLINE | COLOR_PAIR(YELLOW_BLACK) | A_BOLD);
         mvaddch(0, i, ACS_HLINE | COLOR_PAIR(YELLOW_BLACK) | A_BOLD);
         mvaddch(MAP_SIZE+1,i, ACS_HLINE | COLOR_PAIR(YELLOW_BLACK) | A_BOLD);
+    }
+    chtype * controls[4];
+    controls[2]=strtoch("M - mute and stop");
+    controls[3]=strtoch("    the party");
+    controls[1]=strtoch("L - toggle holes");
+    controls[0]=strtoch("SPACE - pause");
+    for (i=0;i<4;i++){
+        add_chstring(winh-6+i,MAP_SIZE+2,controls[i],YELLOW_BLACK,1);
     }
     return;
 }
@@ -276,6 +284,7 @@ void update_score(chtype names[4][10], int color[],coord * current, int color_pa
 void display_map(coord * current, coord * prev, int colors[4], char * time, int ee){
     int i, col;
     chtype names[4][10]={{'B','l','u','e','b','e','l','l',0},{'G','r','e','e','n','l','e','e',0},{'F','r','e','d',0},{'G','r','e','y','d','o','n',0}};
+
     int color_options[]={BLUE_BLACK,GREEN_BLACK,RED_BLACK,WHITE_BLACK, MAGENTA_BLACK, DBLUE_BLACK};
     chtype * timech=strtoch(time);
     add_chstring(4, MAP_SIZE+6,timech,YELLOW_BLACK,1);
@@ -374,7 +383,7 @@ int pick_bot_levels(int * bot_count, int bot_level[2], char logo[23][35]){
         erase();
         old_option=-1; new_option=0;
         display_main_menu(old_option, new_option, bot_levels,logo, 3);
-        add_chstring(34, 33,pick,BGD,1); mvaddch(34,37,(i==0)?'1':'2');
+        add_chstring(30, 33,pick,BGD,1); mvaddch(30,37,(i==0)?'1':'2');
         refresh();
         while (bot_level[i] == 0) {
             key = getch();
@@ -553,6 +562,7 @@ void newgame_menu(char logo[23][35], int colors[4]){
 }
 
 void pick_colors(int colors[4], char logo[23][35]){
+
     option players[4]; int old_option=-1, new_option=0, prevplayer=0, currplayer=0, key, i;
     int avail[4]={0};
     players[0].tekst=strtoch("Player 1 - WASD");
@@ -561,7 +571,7 @@ void pick_colors(int colors[4], char logo[23][35]){
     players[3].tekst=strtoch("Bot 2");
     display_color_menu(old_option,new_option, prevplayer, currplayer,logo, avail);
     while (currplayer!=4){
-        add_chstring(34, (currplayer<2)?28:32,players[currplayer].tekst,BGD,1);
+        add_chstring(30, (currplayer<2)?28:32,players[currplayer].tekst,BGD,1);
         key=getch();
         switch (key){
             case KEY_UP: case 'w': case 'W':
@@ -631,17 +641,19 @@ void pick_colors(int colors[4], char logo[23][35]){
     return;
 }
 
-void high_scores(char * path){
+void high_scores(char * path, char logo[23][35]){
+    add_logo(5, 18, logo);
+    refresh();
+    int lmarg=(winw-15)/2, tmarg=30;
     FILE * dat=fopen(path,"rb"); int i;
     player temp; chtype * buffer;
-    clear();
     for (i=0;i<10;i++) {
         fread(&temp, sizeof(player), 1, dat);
         buffer=strtoch(temp.name);
-        add_chstring(10+i,10,buffer,2,1);
+        add_chstring(tmarg+2*i,lmarg,buffer,YELLOW_BLACK,1);
         free(buffer);
         buffer=numtoch(temp.score);
-        add_chstring(10+i, 21, buffer, 2, 1);
+        add_chstring(tmarg+2*i, lmarg+12, buffer, RED_BLACK, 1);
         free(buffer);
     }
     getch();
@@ -652,9 +664,9 @@ void high_scores(char * path){
 void display_about(char logo[23][35]){
     int slider=1;
     chtype * buffer;
-    int lmarg = (winw-5)/2,
-            tmarg = 35;
-    add_logo(8, 18, logo);
+    int lmarg = (winw)/2,
+            tmarg = 32;
+    add_logo(5, 18, logo);
     buffer=strtoch("Milena Markovic - grafika");
     add_chstring(tmarg+slider,lmarg-12,buffer,YELLOW_BLACK, 1);
     free(buffer); slider++;
@@ -687,7 +699,7 @@ player * loadScore(int score, int color, char logo[23][35]){
     char * buffer;
     chtype names[4][10]={{'B','l','u','e','b','e','l','l',0},{'G','r','e','e','n','l','e','e',0},{'F','r','e','d',0},{'G','r','e','y','d','o','n',0}};
     int color_options[]={BLUE_BLACK,GREEN_BLACK,RED_BLACK,WHITE_BLACK};
-    add_logo(8, 18, logo);
+    add_logo(5, 18, logo);
     mvaddch(tmarg+3,lmarg,ACS_ULCORNER|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
     mvaddch(tmarg+4,lmarg,ACS_VLINE|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
     mvaddch(tmarg+5,lmarg,ACS_LLCORNER|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
