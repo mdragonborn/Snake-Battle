@@ -43,7 +43,7 @@ int pick_bot_levels(int * bot_count, int bot_level[2], char logo[23][35]);
 int pick_botcount(int * player_count, int * bot_count, int * bot_level,char logo[23][35]);
 int pick_player_number(int * player_count,int * bot_count, int bot_level[2], char logo[23][35]);
 void high_scores(char * path);
-player * loadScore(int score, int color, char logo[23][35]);
+player* loadScore(int score, int color, char logo[23][35]);
 void update_score(chtype names[4][10], int color[],coord * current, int color_pairs[]);
 char * name_input(int lmarg, int tmarg, int maxlen, int color);
 void toggle_pause(int pause);

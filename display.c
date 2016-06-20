@@ -543,7 +543,7 @@ void newgame_menu(char logo[23][35], int colors[4]){
     int back=pick_player_number(&player_count,&bot_count,bot_level,logo);
     if (back) return;
     else
-        play_game(player_count, bot_count, bot_level, colors);
+        play_game(player_count, bot_count, bot_level, colors, logo);
     //high score update ???
     return;
 }

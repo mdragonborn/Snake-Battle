@@ -141,8 +141,9 @@ void write_one_high(char* path, coord current, char* player_name){
 
 }
 
-int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
+int play_game(int player_count, int bot_count, int bot_level[2], int colors[4], char logo[23][35]){
     FILE* high;
+    player* worthy_one;
     int mode = 1;
     int sound = 1;
     int hor1, hor2, death, brojac, blank1, blank2, blank3, blank4;
@@ -296,8 +297,9 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     for (i = 0; i < 2; i++){
         if (next.next[i].x == -1) continue;
         if (is_worthy(PATH, next.next[i].score)){
-
-            write_one_high(PATH, next.next[i], "IME");
+            worthy_one = loadScore(next.next[i].score, colors[i], logo);
+            write_one_high(PATH, next.next[i], worthy_one->name);
+            free(worthy_one);
             /*write_xor(PATH);*/
         }
     }
