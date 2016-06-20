@@ -6,7 +6,7 @@
 #define DEMOMENI_PLAYGAME_H
 #define PATH "C:\\Users\\bulse_eye\\Documents\\Snake-Battle\\high_scores.bin"
 int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]);
-int was_modified(char* path);
+int was_modified(FILE* tabela);
 void sort_players(player players[11]);
 void write_xor(char* path, int already_xored);
 void create_new_bin(char* path);

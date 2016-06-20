@@ -21,40 +21,35 @@ int is_worthy(char* path, int score){
     }
     return 0;
 }
-int was_modified(char* path){
-    FILE* high;
-    int result;
-    int last = 0;
-    int position = 0;
-    int end;
-    high = fopen(path, "rb");
-    if (!high) return 1;
-    fseek(high, 0, SEEK_END);
-    end = ftell(high);
-    position = 0;
-    fseek(high, 0, SEEK_SET);
-    result = 0;
-    while (position != end){
-        fread(&last, 1, 1, high);
-        result ^= last;
-        position++;
+int was_modified(FILE* tabela){
+
+    long int kraj_datoteke, i;
+    fseek(tabela, 0L, SEEK_END);
+    kraj_datoteke = ftell(tabela);
+    rewind(tabela);
+    char inspektor = 0;
+
+    for (i = 0; i < kraj_datoteke; i++){
+        char a;
+        fread(&a, sizeof a, 1, tabela);
+        inspektor ^= a;
     }
 
-    fclose(high);
-    if (result != 0) return 1;
-    return 0;
+    return inspektor; // Ovde je uradio i proveru sa poslednjim charom...ako vrati 0 znaci da nije dirano
 }
+
 
 void write_xor(char* path, int already_xored){
     FILE* high;
-    int result;
-    int temp;
+    char result;
+    char temp;
     int i;
     int position = 0, end;
     high = fopen(path, "rb");
     fread(&result, 1, 1, high);
     fseek(high, 0, SEEK_END);
     end = ftell(high);
+    result = 0;
     while (position != end) {
         fread(&temp, 1, 1, high);
         result ^= temp;
@@ -131,6 +126,7 @@ void write_one_high(char* path, coord current, char* player_name){
 }
 
 int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
+    FILE* high;
     int mode = 1;
     int sound = 1;
     int hor1, hor2, death, brojac, blank1, blank2, blank3, blank4;
@@ -150,7 +146,7 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
     lives = calloc(sizeof(int), 4);
     prev_lives = calloc(sizeof(int), 4);
     PlaySound(TEXT("snake_battle_music.wav"), NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT | SND_FILENAME);
-    create_new_bin("C:\\Users\\bulse_eye\\Documents\\Snake-Battle\\high_scores.bin");
+
     current_time = 0;
     first = 1;
     while (1) {
@@ -276,14 +272,15 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4]){
 
 
     }
-    if (was_modified(PATH)){
+    high = fopen(PATH, "rb");
+    if (was_modified(high)){
         create_new_bin(PATH);
         write_xor(PATH, 0);
     }
     for (i = 0; i < 2; i++){
-        if (is_worthy(PATH, current[i].score)){
-            //trazi mu ime
-            write_one_high(PATH, current[i], "IME");
+        if (is_worthy(PATH, next.next[i].score)){
+
+            write_one_high(PATH, next.next[i], "IME");
             write_xor(PATH, 0);
         }
     }
