@@ -47,6 +47,28 @@ void add_chstring(int top, int left, chtype * string, int color_pair, int bold){
     return;
 }
 
+char * name_input(int lmarg, int tmarg, int maxlen, int color){
+    char * string=(char*)calloc(sizeof(char),(unsigned)maxlen+1);
+    chtype * printbuffer=(chtype*)calloc(sizeof(chtype),(unsigned)maxlen+1);
+    int i=0, key;
+    while(1){
+        mvaddch(tmarg,lmarg+i,ACS_BOARD|COLOR_PAIR(color));
+        key=getch();
+        if(key==KEY_ENTER)
+            return string;
+        if(key>=32 && key<=126 && i<10) {
+            string[i++] = (char) key;
+            printbuffer[i++]=(chtype) key;
+        }
+        if(key==KEY_BACKSPACE) {
+            string[i--] = 0;
+            printbuffer[i++]=0;
+        }
+        for (key=0;key<maxlen;key++) mvaddch(tmarg,lmarg,' '|COLOR_PAIR(BGD));
+        add_chstring(tmarg,lmarg,printbuffer,color,1);
+    }
+}
+
 void addsqr(int top, int left, int size, int color_pair, int bold){
     int i, j;
     if (!bold)
@@ -618,7 +640,7 @@ void high_scores(char * path){
         add_chstring(10+i, 21, buffer, 2, 1);
         free(buffer);
     }
-    i=getch();
+    getch();
     fclose(dat);
     return;
 }
@@ -655,31 +677,33 @@ void display_about(char logo[23][35]){
     return;
 }
 
-void loadScore(int score, int color){
-    
+player * loadScore(int score, int color, char logo[23][35]){
+   erase(); int tmarg=35, lmarg=(winw-12)/2,i;
+    player * newplayer=(player*)calloc(sizeof(player),1);
+    char * buffer;
+    chtype names[4][10]={{'B','l','u','e','b','e','l','l',0},{'G','r','e','e','n','l','e','e',0},{'F','r','e','d',0},{'G','r','e','y','d','o','n',0}};
+    int color_options[]={BLUE_BLACK,GREEN_BLACK,RED_BLACK,WHITE_BLACK};
+    add_logo(8, (winw-17)/2-10, logo);
+    mvaddch(lmarg,tmarg+3,ACS_ULCORNER|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
+    mvaddch(lmarg,tmarg+4,ACS_VLINE|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
+    mvaddch(lmarg,tmarg+5,ACS_LLCORNER|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
+    mvaddch(lmarg+11,tmarg+3,ACS_URCORNER|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
+    mvaddch(lmarg+11,tmarg+4,ACS_VLINE|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
+    mvaddch(lmarg+11,tmarg+5,ACS_LRCORNER|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
+    for(i=1;i<12;i++){
+        mvaddch(lmarg+i,tmarg+3,ACS_HLINE|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
+        mvaddch(lmarg+i,tmarg+5,ACS_HLINE|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
+    }
+    chtype hs[]={'N','e','w',' ', 'h','i','g','h','s','c','o','r','e',' ',':', ' ', 0};
+    add_chstring(tmarg,lmarg,hs,color_options[color],1);
+    add_chstring(tmarg,lmarg+16,names[color],color_options[color],1);
+    buffer=name_input(lmarg+1,tmarg+4,10,BGD);
+    strcpy(newplayer->name,buffer);
+    free(buffer);
+    newplayer->score=score;
+    return newplayer;
 }
 
-char * name_input(int lmarg, int tmarg, int maxlen, int color){
-    char * string=(char*)calloc(sizeof(char),(unsigned)maxlen+1);
-    chtype * printbuffer=(chtype*)calloc(sizeof(chtype),(unsigned)maxlen+1);
-    int i=0, key;
-    while(1){
-        mvaddch(tmarg,lmarg+i,ACS_BOARD|COLOR_PAIR(color));
-        key=getch();
-        if(key==KEY_ENTER)
-            return string;
-        if(key>=32 && key<=126 && i<10) {
-            string[i++] = (char) key;
-            printbuffer[i++]=(chtype) key;
-        }
-        if(key==KEY_BACKSPACE) {
-            string[i--] = 0;
-            printbuffer[i++]=0;
-        }
-        for (key=0;key<maxlen;key++) mvaddch(tmarg,lmarg,' '|COLOR_PAIR(BGD));
-        add_chstring(tmarg,lmarg,printbuffer,color,1);
-    }
-}
 
 /*void pitajzaime(char *ime) {
     char brojac, i, j;

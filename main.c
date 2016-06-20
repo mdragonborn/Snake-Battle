@@ -11,11 +11,11 @@
 int main() {
     option commands[6];
     int colors[4];
-    if (was_modified(PATH)){
+    /*if (was_modified(PATH)){
         create_new_bin(PATH);
         write_xor(PATH, 0);
 
-    }
+    }*/
 
     colors[0]=0; colors[1]=1; colors[2]=2; colors[3]=3;
     commands[0].tekst = strtoch("Nova igra");
@@ -73,7 +73,7 @@ int main() {
                         newgame_menu(logo, colors);
                         break;
                     case 1:
-                        high_scores("C:\\Users\\bulse_eye\\Documents\\Snake-Battle\\high_scores.bin");
+                        //high_scores("C:\\Users\\bulse_eye\\Documents\\Snake-Battle\\high_scores.bin");
                         break;
                     case 4:
                         display_about(logo);
