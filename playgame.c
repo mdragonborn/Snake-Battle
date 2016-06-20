@@ -320,7 +320,9 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4], 
         previous=(coord*)calloc(sizeof(coord),4);
         display_map(current,previous,colors, map.timer, 0);
 
-        Sleep(1000);
+        while (1) {
+            if (_kbhit()) break;
+        }
 
         while(1){
             if (!prva) current_time += stop_timer(&t);
