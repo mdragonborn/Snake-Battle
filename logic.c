@@ -107,7 +107,7 @@ void error() {
     exit(1);
 }
 
-next_m next_move(board map, coord *current, int moves, int* lives, int* prev_lives, int* zvuk, int E) {
+next_m next_move(board map, coord *current, int moves, int* lives, int* prev_lives, int* zvuk, int E, int* rupice) {
     next_m vrati;
     int input, hor1, hor2;
     double TIMEOUT;
@@ -147,6 +147,10 @@ next_m next_move(board map, coord *current, int moves, int* lives, int* prev_liv
     }
     else if (input == 27){
         vrati.delay = -27;
+    }
+    else if (input == 'l'){
+        *rupice = toggle(*rupice);
+
     }
 
     if (input != 'm'){
