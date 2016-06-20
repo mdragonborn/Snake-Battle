@@ -655,6 +655,10 @@ void display_about(char logo[23][35]){
     return;
 }
 
+void loadScore(int score, int color){
+    
+}
+
 char * name_input(int lmarg, int tmarg, int maxlen, int color){
     char * string=(char*)calloc(sizeof(char),(unsigned)maxlen+1);
     chtype * printbuffer=(chtype*)calloc(sizeof(chtype),(unsigned)maxlen+1);
