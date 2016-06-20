@@ -143,6 +143,7 @@ void write_one_high(char* path, coord current, char* player_name){
 
 int play_game(int player_count, int bot_count, int bot_level[2], int colors[4], char logo[23][35]){
     FILE* high;
+    int rupice = 0;
     player* worthy_one;
     int mode = 1;
     int sound = 1;
@@ -198,11 +199,11 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4], 
                 blank4 = (int) rintl((mt_ldrand() * 9)) + 1;
             }
             if (E == 0){
-                next=next_move(map,current, map.moves, lives, prev_lives, &sound, 0);
+                next=next_move(map,current, map.moves, lives, prev_lives, &sound, 0, &rupice);
 
             }
             else {
-                next=next_move(map,current, map.moves, lives, prev_lives, &sound, next.ee);
+                next=next_move(map,current, map.moves, lives, prev_lives, &sound, next.ee, &rupice);
             }
             E = 1;
             if (next.delay == -32){
@@ -239,23 +240,23 @@ int play_game(int player_count, int bot_count, int bot_level[2], int colors[4], 
             }
             if (next.delay != -32) {
 
-                if (brojac == blank1) {
+                if ((brojac == blank1) && rupice) {
                     next.next[0].blank = 1;
                 }
 
                 else next.next[0].blank = 0;
 
-                if (brojac == blank2) {
+                if ((brojac == blank2) && rupice) {
                     next.next[1].blank = 1;
                 }
                 else next.next[1].blank = 0;
 
-                if (brojac == blank3) {
+                if ((brojac == blank3) && rupice) {
                     next.next[2].blank = 1;
                 }
                 else next.next[2].blank = 0;
 
-                if (brojac == blank4) {
+                if ((brojac == blank4) && rupice) {
                     next.next[3].blank = 1;
                 }
                 else next.next[3].blank = 0;
