@@ -25,18 +25,23 @@ int was_modified(char* path){
     FILE* high;
     int result;
     int last = 0;
-
+    int position = 0;
+    int end;
     high = fopen(path, "rb");
+    if (!high) return 1;
     fseek(high, 0, SEEK_END);
-    if (ftell(high) == 0) return 1;
-    fread(&result, 1, 1, high);
-    while (!feof(high)){
+    end = ftell(high);
+    position = 0;
+    fseek(high, 0, SEEK_SET);
+    result = 0;
+    while (position != end){
         fread(&last, 1, 1, high);
         result ^= last;
+        position++;
     }
-    result ^= last;
+
     fclose(high);
-    if (last != result) return 1;
+    if (result != 0) return 1;
     return 0;
 }
 

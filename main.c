@@ -14,6 +14,7 @@ int main() {
     if (was_modified(PATH)){
         create_new_bin(PATH);
         write_xor(PATH, 0);
+
     }
 
     colors[0]=0; colors[1]=1; colors[2]=2; colors[3]=3;
