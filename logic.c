@@ -72,6 +72,7 @@ int time_to_str(double x, char* timer){
 int toggle(int a){
     return a == 1 ? 0 : 1;
 }
+coord myBot(board b, coord s);
 
 void copy_coord(coord *source, coord *target) {
     int i;
@@ -434,7 +435,7 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
     else new_coord[2] = current[2];
 
     if (lives[3] != 0) {
-        if (current[3].bot_level == 1) new_coord[3] =  mediumbot(current[3].x, current[3].y, current[3].dir, map.brd );
+        if (current[3].bot_level == 1) new_coord[3] = mediumbot(current[3].x, current[3].y, current[3].dir, map.brd );
         else if (current[3].bot_level == 2) new_coord[3] = hard_botovi[1];
         new_coord[3].bot_level = current[3].bot_level;
         new_coord[3].score = current[3].score;
