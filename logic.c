@@ -311,7 +311,7 @@ coord *move_player(coord current[4], int input, int hor1, int hor2, int moves, b
 
     for (i = 2; i < 4; i++){
         if (current[i].bot_level == 2){
-            hard_botovi = hardbot(map, current, kopija);
+            hard_botovi = hardbot(map, current, kopija, lives);
             break;
         }
     }
