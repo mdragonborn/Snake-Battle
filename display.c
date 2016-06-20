@@ -169,12 +169,12 @@ void add_logo(int top, int left, char logo[23][35]){
 
 void display_main_menu(int old_option, int new_option, option * commands, char logo[23][35], int n_commands) { //n_commands ???
     chtype dot[]={'<', ' ' ,'>', ' ',0}, selected[]={'<',ACS_DIAMOND,'>', ' ',0};
-    int lmarg = (winw-17)/2,
+    int lmarg = (winw-25)/2,
             tmarg = 35;
     int i;
     if (old_option == -1) {
         set_bckgd(2);
-        add_logo(8, lmarg-10, logo);
+        add_logo(8, 18, logo);
         for (i = 0; i < n_commands; i++)
         {
             if (i==new_option)
@@ -193,14 +193,14 @@ void display_main_menu(int old_option, int new_option, option * commands, char l
 }
 
 void display_color_menu(int old_option, int new_option, int prev_player, int curr_player, char logo[23][35], int avail[4]){
-    int lmarg = (winw-16)/2,
+    int lmarg = (winw-20)/2,
             tmarg = 40;
     int color_options[]={BLUE_BLACK,GREEN_BLACK,RED_BLACK,WHITE_BLACK};
     int i;
     if (old_option == -1 || prev_player!=curr_player) {
         clear();
         set_bckgd(2);
-        add_logo(8, (winw-17)/2-10, logo);
+        add_logo(8, 18, logo);
         for (i = 0; i < 4; i++)
         {
             addsqr(tmarg+((i>1)?5:0), lmarg+(i%2)*5,3,color_options[i],avail[i]);
@@ -561,7 +561,7 @@ void pick_colors(int colors[4], char logo[23][35]){
     players[3].tekst=strtoch("Bot 2");
     display_color_menu(old_option,new_option, prevplayer, currplayer,logo, avail);
     while (currplayer!=4){
-        add_chstring(34, 30,players[currplayer].tekst,BGD,1);
+        add_chstring(34, (currplayer<2)?28:32,players[currplayer].tekst,BGD,1);
         key=getch();
         switch (key){
             case KEY_UP: case 'w': case 'W':
@@ -654,7 +654,7 @@ void display_about(char logo[23][35]){
     chtype * buffer;
     int lmarg = (winw-5)/2,
             tmarg = 35;
-    add_logo(8, (winw-17)/2-10, logo);
+    add_logo(8, 18, logo);
     buffer=strtoch("Milena Markovic - grafika");
     add_chstring(tmarg+slider,lmarg-12,buffer,YELLOW_BLACK, 1);
     free(buffer); slider++;
@@ -687,7 +687,7 @@ player * loadScore(int score, int color, char logo[23][35]){
     char * buffer;
     chtype names[4][10]={{'B','l','u','e','b','e','l','l',0},{'G','r','e','e','n','l','e','e',0},{'F','r','e','d',0},{'G','r','e','y','d','o','n',0}};
     int color_options[]={BLUE_BLACK,GREEN_BLACK,RED_BLACK,WHITE_BLACK};
-    add_logo(8, (winw-17)/2-10, logo);
+    add_logo(8, 18, logo);
     mvaddch(tmarg+3,lmarg,ACS_ULCORNER|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
     mvaddch(tmarg+4,lmarg,ACS_VLINE|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);
     mvaddch(tmarg+5,lmarg,ACS_LLCORNER|COLOR_PAIR(YELLOW_BLACK)|A_BOLD);

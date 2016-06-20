@@ -8,7 +8,7 @@
 #include <curses.h>
 
 #define winh 52
-#define winw 80
+#define winw 70
 #define BGD 2
 #define BGDC 6
 #define BOARD_SIZE 30
